@@ -97,7 +97,7 @@ public class PhotoActivity extends AppCompatActivity {
                 break;
             case R.id.button2:
                 if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
-                    PhotoOrCropUtil.getInstance().gallery();
+                    PhotoOrCropUtil.getInstance().album();
                 }
                 break;
         }
@@ -114,7 +114,7 @@ public class PhotoActivity extends AppCompatActivity {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    PhotoOrCropUtil.getInstance().gallery();
+                    PhotoOrCropUtil.getInstance().album();
                 } else {
                     Toast.makeText(PhotoActivity.this, "GET_ACCOUNTS Denied",
                             Toast.LENGTH_SHORT).show();

@@ -46,7 +46,7 @@ public class PhotoOrCropUtil {
         mContext = context;
     }
 
-    public void gallery() {
+    public void album() {
         Intent intent = new Intent(mContext, MultiImageSelectorActivity.class);
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, true);
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 9);
