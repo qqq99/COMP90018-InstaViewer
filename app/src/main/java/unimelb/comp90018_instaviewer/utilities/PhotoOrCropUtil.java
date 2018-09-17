@@ -104,7 +104,7 @@ public class PhotoOrCropUtil {
             if (hasSdcard()) {
                 crop(Uri.fromFile(tempFile));
             } else {
-                showToast("未找到存储卡，无法存储照片！");
+                showToast("No storage card found, image cannot be saved.");
             }
         } else if (requestCode == PHOTO_REQUEST_CUT) {
             if (resultCode == ((Activity) mContext).RESULT_OK) {
