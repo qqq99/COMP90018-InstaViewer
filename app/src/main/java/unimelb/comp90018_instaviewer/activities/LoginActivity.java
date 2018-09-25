@@ -23,10 +23,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import unimelb.comp90018_instaviewer.R;
+import unimelb.comp90018_instaviewer.utilities.Authentication;
 
 public class LoginActivity extends AppCompatActivity {
     private final String TAG = "Login";
     private static final int RC_SIGN_IN = 9001;
+
+    private Authentication authProcess = new Authentication();
 
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -90,6 +93,9 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_LONG).show();
+                            authProcess.setAuthDetails(user);
+                            authProcess.run();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
