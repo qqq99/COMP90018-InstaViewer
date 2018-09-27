@@ -19,8 +19,6 @@ import java.util.ArrayList;
 
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
-import static android.hardware.camera2.CameraMetadata.FLASH_MODE_TORCH;
-
 /**
  * Created by qxx1 on 2018/9/16.
  */
@@ -32,19 +30,18 @@ public class PhotoOrCropUtil {
     private static final int PHOTO_REQUEST_CAREMA = 2;
     private static final int PHOTO_REQUEST_CUT = 3;
     private static final String PHOTO_FILE_NAME = "image";
+    private static PhotoOrCropUtil UTIL_INSTANCE = new PhotoOrCropUtil();
 
+    private Context mContext;
     private File tempFile = new File(Environment.getExternalStorageDirectory(), PHOTO_FILE_NAME);
     private Uri imageUri = null;
     private ArrayList<String> mSelectPath;
-    private static PhotoOrCropUtil mInstance;
-    private Context mContext;
     private PhotoOrCropListener mListener;
 
-    public static synchronized PhotoOrCropUtil getInstance() {
-        if (mInstance == null) {
-            mInstance = new PhotoOrCropUtil();
-        }
-        return mInstance;
+    private PhotoOrCropUtil() {}
+
+    public static PhotoOrCropUtil getInstance() {
+        return UTIL_INSTANCE;
     }
 
     public void setContext(Context context) {
