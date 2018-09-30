@@ -36,6 +36,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+<<<<<<< HEAD
     implementation 'com.android.support:multidex:1.0.3'
 
     /* Firebase */
@@ -44,6 +45,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.0'
     implementation 'com.google.firebase:firebase-functions:16.1.0'
     implementation'com.github.lovetuzitong:MultiImageSelector:1.2'
+=======
+    compile 'com.github.lovetuzitong:MultiImageSelector:1.2'
+    compile 'com.github.awenzeng:camera:1.0.1'
+>>>>>>> add a third party dependency to enable flash
 }
 
 apply plugin: 'com.google.gms.google-services'

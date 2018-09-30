@@ -14,6 +14,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.awen.camera.view.TakePhotoActivity;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -161,6 +164,9 @@ public class PhotoOrCropUtil {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else if (requestCode == TakePhotoActivity.REQUEST_CAPTRUE_CODE) {
+            String path = data.getStringExtra(TakePhotoActivity.RESULT_PHOTO_PATH);
+            mListener.uploadAvatar(path);
         }
     }
 
