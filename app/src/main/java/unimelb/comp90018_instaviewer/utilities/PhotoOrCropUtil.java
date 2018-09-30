@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -60,11 +62,29 @@ public class PhotoOrCropUtil {
     }
 
     public void camera() {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        /**
+         * Check whether flash is enabled
+         */
+        if (this.mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
+            Camera cam = Camera.open();
+            Camera.Parameters p = cam.getParameters();
+            p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            cam.setParameters(p);
+            cam.startPreview();
+        }
+
+        /**
+         * The Intent for camera doesn't support for flash control, please refer to:
+         * https://stackoverflow.com/questions/19667094/intent-does-not-set-the-camera-parameters
+         */
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (hasSdcard()) {
             Uri uri = Uri.fromFile(tempFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
+        // it seems it does not take effect here
+        intent.putExtra("android.intent.extras.FLASH_MODE_ON", 1);
+
         ((Activity) mContext).startActivityForResult(intent, PHOTO_REQUEST_CAREMA);
     }
 
