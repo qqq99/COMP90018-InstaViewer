@@ -7,61 +7,41 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Paint;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.Toast;
 import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.utilities.PhotoOrCropUtil;
 
 public class PhotoActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
-    public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 124;
-    public static final int MAX_WIDTH = 100;
-    public static final int MAX_HEIGHT = 100;
-
-    private Button fromCameraBtn;
-    private Button fromAlbumBtn;
-    private Bitmap bitmap;
-    private int imageHeight;
-    private int imageWidth;
-    private ImageView mImage;
-    private SeekBar saturationSeekBar, brightnessSeekBar, contrastSeekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+        PhotoOrCropUtil.getInstance().setAlbumAndCameraContext(this);
 
-        fromCameraBtn = findViewById(R.id.fromCamera);
-        fromAlbumBtn = findViewById(R.id.fromAlbum);
-        mImage = findViewById(R.id.img);
-        saturationSeekBar = findViewById(R.id.saturationSeekbar);
-        brightnessSeekBar = findViewById(R.id.brightnessSeekbar);
-        contrastSeekBar = findViewById(R.id.contrastSeekbar);
+        Intent fromIntent = getIntent();
+        if (fromIntent != null) {
+            String imageSavedPath = fromIntent.getStringExtra("imageSavedPath");
+            Toast.makeText(PhotoActivity.this,
+                    "Processed image has been saved to path: " + imageSavedPath, Toast.LENGTH_LONG).show();
+        }
 
-        PhotoOrCropUtil.getInstance().setContext(this);
-        PhotoOrCropUtil.getInstance().setPhotoOrCropListener(new PhotoOrCropUtil.PhotoOrCropListener() {
+        PhotoOrCropUtil.getInstance().setAlbumAndCameraCallback(new PhotoOrCropUtil.PhotoOrCropListener() {
             @Override
             public void uploadAvatar(String imageFilePath) {
-                mImage.setImageBitmap(resizeBitmap(imageFilePath));
-                findViewById(R.id.operation).setVisibility(View.VISIBLE);
+                Intent intent = new Intent(PhotoActivity.this, PhotoProcessActivity.class);
+                intent.putExtra("imagePath", imageFilePath);
+                startActivity(intent);
+                PhotoActivity.this.finish();
             }
         });
-
-        addEventListener();
     }
 
     public boolean checkPermissionREAD_EXTERNAL_STORAGE(final Context context) {
@@ -78,31 +58,6 @@ public class PhotoActivity extends AppCompatActivity {
                             (Activity) context,
                             new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                             MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                }
-                return false;
-            } else {
-                return true;
-            }
-
-        } else {
-            return true;
-        }
-    }
-
-    public boolean checkPermissionWRITE_EXTERNAL_STORAGE(final Context context) {
-        int currentAPIVersion = Build.VERSION.SDK_INT;
-        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        (Activity) context,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    showDialog("External storage", context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                } else {
-                    ActivityCompat.requestPermissions(
-                            (Activity) context,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
                 }
                 return false;
             } else {
@@ -145,18 +100,6 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
-    public void cropImage(View view) {
-        if (checkPermissionWRITE_EXTERNAL_STORAGE(this)) {
-            PhotoOrCropUtil.getInstance().cropImage(mImage);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        PhotoOrCropUtil.getInstance().onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -168,127 +111,15 @@ public class PhotoActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    PhotoOrCropUtil.getInstance().cropImage(mImage);
-                } else {
-                    Toast.makeText(PhotoActivity.this, "GET_ACCOUNTS Denied",
-                            Toast.LENGTH_SHORT).show();
-                }
-                break;
-
             default:
                 super.onRequestPermissionsResult(requestCode, permissions,
                         grantResults);
         }
     }
 
-    private Bitmap resizeBitmap(String imageFilePath) {
-        try {
-            BitmapFactory.Options ops = new BitmapFactory.Options();
-            ops.inJustDecodeBounds = true;
-
-            int wRatio = (int) Math.ceil(ops.outWidth / (float) MAX_WIDTH);
-            int hRatio = (int) Math.ceil(ops.outHeight / (float) MAX_HEIGHT);
-
-            if (wRatio > 1 && hRatio > 1) {
-                if (wRatio > hRatio) {
-                    ops.inSampleSize = wRatio;
-                } else {
-                    ops.inSampleSize = hRatio;
-                }
-            }
-            ops.inJustDecodeBounds = false;
-
-            this.bitmap = BitmapFactory.decodeFile(imageFilePath, ops);
-            this.imageHeight = this.bitmap.getHeight();
-            this.imageWidth = this.bitmap.getWidth();
-            return this.bitmap;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        PhotoOrCropUtil.getInstance().onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
-
-    private void addEventListener() {
-        saturationSeekBar
-                .setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    public void onProgressChanged(SeekBar arg0, int progress,
-                                                  boolean fromUser) {
-                        Bitmap bmp = Bitmap.createBitmap(imageWidth, imageHeight,
-                                Bitmap.Config.ARGB_8888);
-                        ColorMatrix cMatrix = new ColorMatrix();
-                        cMatrix.setSaturation((float) (progress / 100.0));
-
-                        Paint paint = new Paint();
-                        paint.setColorFilter(new ColorMatrixColorFilter(cMatrix));
-
-                        Canvas canvas = new Canvas(bmp);
-                        canvas.drawBitmap(bitmap, 0, 0, paint);
-                        mImage.setImageBitmap(bmp);
-                    }
-
-                    public void onStartTrackingTouch(SeekBar bar) {
-                    }
-
-                    public void onStopTrackingTouch(SeekBar bar) {
-                    }
-                });
-
-        brightnessSeekBar
-                .setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    public void onProgressChanged(SeekBar arg0, int progress,
-                                                  boolean fromUser) {
-                        Bitmap bmp = Bitmap.createBitmap(imageWidth, imageHeight,
-                                Bitmap.Config.ARGB_8888);
-                        int brightness = progress - 127;
-                        ColorMatrix cMatrix = new ColorMatrix();
-                        cMatrix.set(new float[]{1, 0, 0, 0, brightness, 0, 1,
-                                0, 0, brightness,
-                                0, 0, 1, 0, brightness, 0, 0, 0, 1, 0});
-
-                        Paint paint = new Paint();
-                        paint.setColorFilter(new ColorMatrixColorFilter(cMatrix));
-
-                        Canvas canvas = new Canvas(bmp);
-                        canvas.drawBitmap(bitmap, 0, 0, paint);
-                        mImage.setImageBitmap(bmp);
-                    }
-
-                    public void onStartTrackingTouch(SeekBar bar) {
-                    }
-
-                    public void onStopTrackingTouch(SeekBar bar) {
-                    }
-                });
-
-        contrastSeekBar
-                .setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    public void onProgressChanged(SeekBar arg0, int progress,
-                                                  boolean fromUser) {
-                        Bitmap bmp = Bitmap.createBitmap(imageWidth, imageHeight,
-                                Bitmap.Config.ARGB_8888);
-                        float contrast = (float) ((progress + 64) / 128.0);
-                        ColorMatrix cMatrix = new ColorMatrix();
-                        cMatrix.set(new float[] { contrast, 0, 0, 0, 0, 0,
-                                contrast, 0, 0, 0,
-                                0, 0, contrast, 0, 0, 0, 0, 0, 1, 0 });
-
-                        Paint paint = new Paint();
-                        paint.setColorFilter(new ColorMatrixColorFilter(cMatrix));
-
-                        Canvas canvas = new Canvas(bmp);
-                        canvas.drawBitmap(bitmap, 0, 0, paint);
-                        mImage.setImageBitmap(bmp);
-                    }
-
-                    public void onStartTrackingTouch(SeekBar arg0) {
-                    }
-
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                    }
-                });
-    }
-
 }

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.PhotoProcessActivity">
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/filter1"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="snow" />
+
+        <Button
+            android:id="@+id/filter2"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="black" />
+
+        <Button
+            android:id="@+id/filter3"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="flea" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Saturation" />
+
+        <SeekBar
+            android:id="@+id/saturationSeekbar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="200"
+            android:progress="100" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Brightness" />
+
+        <SeekBar
+            android:id="@+id/brightnessSeekbar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="255"
+            android:progress="127" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Contrast" />
+
+        <SeekBar
+            android:id="@+id/contrastSeekbar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="127"
+            android:progress="63" />
+    </LinearLayout>
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/crop_image"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="crop" />
+
+        <Button
+            android:id="@+id/reset_image"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="reset" />
+
+        <Button
+            android:id="@+id/done"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="done" />
+    </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/IvImage"
+        />
+</LinearLayout>

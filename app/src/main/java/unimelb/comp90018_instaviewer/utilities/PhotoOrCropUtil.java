@@ -33,11 +33,11 @@ public class PhotoOrCropUtil {
     private static final String PHOTO_FILE_NAME = "image";
     private static PhotoOrCropUtil UTIL_INSTANCE = new PhotoOrCropUtil();
 
-    private Context mContext;
+    private Context albumAndCameraContext, cropContext;
     private File tempFile = new File(Environment.getExternalStorageDirectory(), PHOTO_FILE_NAME);
     private Uri imageUri = null;
     private ArrayList<String> mSelectPath;
-    private PhotoOrCropListener mListener;
+    private PhotoOrCropListener albumAndCameraListener, cropListener;
 
     private PhotoOrCropUtil() {}
 
@@ -45,27 +45,31 @@ public class PhotoOrCropUtil {
         return UTIL_INSTANCE;
     }
 
-    public void setContext(Context context) {
-        mContext = context;
+    public void setAlbumAndCameraContext(Context context) {
+        albumAndCameraContext = context;
+    }
+
+    public void setCropContext(Context context) {
+        this.cropContext = context;
     }
 
     public void album() {
-        Intent intent = new Intent(mContext, MultiImageSelectorActivity.class);
+        Intent intent = new Intent(albumAndCameraContext, MultiImageSelectorActivity.class);
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, true);
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 9);
         intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE, MultiImageSelectorActivity.MODE_SINGLE);
         if (mSelectPath != null && mSelectPath.size() > 0) {
             intent.putExtra(MultiImageSelectorActivity.EXTRA_DEFAULT_SELECTED_LIST, mSelectPath);
         }
-        ((Activity) mContext).startActivityForResult(intent, PHOTO_REQUEST_GALLERY);
+        ((Activity) albumAndCameraContext).startActivityForResult(intent, PHOTO_REQUEST_GALLERY);
     }
 
     public void camera() {
         /**
          * Check whether flash is enabled
          */
-        if (!this.mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
-            Toast.makeText(this.mContext, "Flash is not support in this device.", Toast.LENGTH_SHORT).show();
+        if (!this.albumAndCameraContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
+            this.showToast("Flash is not support in this device.");
         }
 
         /**
@@ -79,7 +83,7 @@ public class PhotoOrCropUtil {
             Uri uri = Uri.fromFile(tempFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
-        ((Activity) mContext).startActivityForResult(intent, PHOTO_REQUEST_CAREMA);
+        ((Activity) albumAndCameraContext).startActivityForResult(intent, PHOTO_REQUEST_CAREMA);
     }
 
     private void crop(Uri uri, int w, int h) {
@@ -97,7 +101,7 @@ public class PhotoOrCropUtil {
         imageUri = Uri.fromFile(tempFile);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("noFaceDetection", true);
-        ((Activity) mContext).startActivityForResult(intent, PHOTO_REQUEST_CUT);
+        ((Activity) cropContext).startActivityForResult(intent, PHOTO_REQUEST_CUT);
     }
 
     public void cropImage(ImageView imageView) {
@@ -115,6 +119,23 @@ public class PhotoOrCropUtil {
         }
     }
 
+    public String saveImage(ImageView imageView) {
+        Bitmap bitmap = Bitmap.createBitmap(imageView.getWidth(), imageView.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        imageView.draw(canvas);
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(this.tempFile));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+            imageUri = Uri.fromFile(tempFile);
+            return this.getRealFilePath(this.albumAndCameraContext, imageUri);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Image save error";
+        }
+    }
+
     public static boolean hasSdcard() {
         return Environment.MEDIA_MOUNTED.equals(Environment
                 .getExternalStorageState());
@@ -128,20 +149,20 @@ public class PhotoOrCropUtil {
                 for (String p : mSelectPath) {
                     sb.append(p);
                 }
-                this.mListener.uploadAvatar(this.getRealFilePath(this.mContext, Uri.parse("file://" + sb.toString())));
+                this.albumAndCameraListener.uploadAvatar(this.getRealFilePath(this.albumAndCameraContext, Uri.parse("file://" + sb.toString())));
             }
         } else if (requestCode == PHOTO_REQUEST_CAREMA) {
             if (hasSdcard()) {
                 Uri uri = Uri.fromFile(tempFile);
-                this.mListener.uploadAvatar(this.getRealFilePath(this.mContext, uri));
+                this.albumAndCameraListener.uploadAvatar(this.getRealFilePath(this.albumAndCameraContext, uri));
             } else {
                 showToast("No storage card found, image cannot be saved.");
             }
         } else if (requestCode == PHOTO_REQUEST_CUT) {
-            if (resultCode == ((Activity) mContext).RESULT_OK) {
+            if (resultCode == ((Activity) albumAndCameraContext).RESULT_OK) {
                 if (imageUri != null) {
                     try {
-                        mListener.uploadAvatar(this.getRealFilePath(mContext, imageUri));
+                        cropListener.uploadAvatar(this.getRealFilePath(albumAndCameraContext, imageUri));
                         imageUri = null;
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -158,8 +179,12 @@ public class PhotoOrCropUtil {
         }
     }
 
-    public void setPhotoOrCropListener(PhotoOrCropListener listener) {
-        mListener = listener;
+    public void setAlbumAndCameraCallback(PhotoOrCropListener listener) {
+        albumAndCameraListener = listener;
+    }
+
+    public void setCropCallback(PhotoOrCropListener listener) {
+        this.cropListener = listener;
     }
 
     public String getRealFilePath(final Context context, final Uri uri) {
@@ -192,6 +217,6 @@ public class PhotoOrCropUtil {
     }
 
     private void showToast(String message) {
-        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(albumAndCameraContext, message, Toast.LENGTH_SHORT).show();
     }
 }
