@@ -64,7 +64,7 @@ public class PhotoOrCropUtil {
         /**
          * Check whether flash is enabled
          */
-        if (this.mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
+        if (!this.mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
             Toast.makeText(this.mContext, "Flash is not support in this device.", Toast.LENGTH_SHORT).show();
         }
 
