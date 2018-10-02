@@ -23,10 +23,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
-
-import com.awen.camera.model.PermissionsModel;
-import com.awen.camera.view.TakePhotoActivity;
-
 import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.utilities.PhotoOrCropUtil;
 
@@ -48,18 +44,6 @@ public class PhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-
-        PermissionsModel permissionsModel = new PermissionsModel(this);
-        permissionsModel.checkCameraPermission(new PermissionsModel.PermissionListener() {
-            @Override
-            public void onPermission(boolean isPermission) {
-                if (isPermission) {
-                    Intent intent = new Intent(PhotoActivity.this, TakePhotoActivity.class);
-                    startActivityForResult(intent, TakePhotoActivity.REQUEST_CAPTRUE_CODE);
-                }
-            }
-        });
-
 
         fromCameraBtn = findViewById(R.id.fromCamera);
         fromAlbumBtn = findViewById(R.id.fromAlbum);

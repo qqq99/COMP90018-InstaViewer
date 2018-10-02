@@ -47,7 +47,10 @@ dependencies {
     implementation'com.github.lovetuzitong:MultiImageSelector:1.2'
 =======
     compile 'com.github.lovetuzitong:MultiImageSelector:1.2'
+<<<<<<< HEAD
     compile 'com.github.awenzeng:camera:1.0.1'
+>>>>>>> add a third party dependency to enable flash
+=======
 >>>>>>> add a third party dependency to enable flash
 }
 
