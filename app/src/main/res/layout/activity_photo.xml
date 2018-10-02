@@ -6,21 +6,16 @@
     tools:context=".activities.PhotoActivity">
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/fromCamera"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onClick"
         android:text="Camera" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/fromAlbum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onClick"
-        android:text="Local" />
-
-    <ImageView
-        android:id="@+id/img"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:text="Album" />
 </LinearLayout>
