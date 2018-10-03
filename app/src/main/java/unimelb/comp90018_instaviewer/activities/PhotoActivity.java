@@ -38,10 +38,12 @@ public class PhotoActivity extends AppCompatActivity {
         PhotoOrCropUtil.getInstance().setAlbumAndCameraCallback(new PhotoOrCropUtil.PhotoOrCropListener() {
             @Override
             public void uploadAvatar(String imageFilePath) {
-                Intent intent = new Intent(PhotoActivity.this, PhotoProcessActivity.class);
-                intent.putExtra("imagePath", imageFilePath);
-                startActivity(intent);
-                PhotoActivity.this.finish();
+                if (imageFilePath != null) {
+                    Intent intent = new Intent(PhotoActivity.this, PhotoProcessActivity.class);
+                    intent.putExtra("imagePath", imageFilePath);
+                    startActivity(intent);
+                    PhotoActivity.this.finish();
+                }
             }
         });
     }
