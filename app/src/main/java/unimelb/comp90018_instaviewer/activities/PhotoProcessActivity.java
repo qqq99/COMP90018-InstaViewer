@@ -177,7 +177,7 @@ public class PhotoProcessActivity extends AppCompatActivity {
                         paint.setColorFilter(new ColorMatrixColorFilter(cMatrix));
 
                         Canvas canvas = new Canvas(bmp);
-                        canvas.drawBitmap(old, 0, 0, paint);
+                        canvas.drawBitmap(oriBitmap, 0, 0, paint);
                         imageView.setImageBitmap(bmp);
                     }
 
@@ -196,7 +196,7 @@ public class PhotoProcessActivity extends AppCompatActivity {
 
                         Bitmap bmp = Bitmap.createBitmap(old.getWidth(), old.getHeight(),
                                 Bitmap.Config.ARGB_8888);
-                        int brightness = progress - 127;
+                        int brightness = progress - 100;
                         ColorMatrix cMatrix = new ColorMatrix();
                         cMatrix.set(new float[]{1, 0, 0, 0, brightness, 0, 1,
                                 0, 0, brightness,
@@ -206,7 +206,7 @@ public class PhotoProcessActivity extends AppCompatActivity {
                         paint.setColorFilter(new ColorMatrixColorFilter(cMatrix));
 
                         Canvas canvas = new Canvas(bmp);
-                        canvas.drawBitmap(old, 0, 0, paint);
+                        canvas.drawBitmap(oriBitmap, 0, 0, paint);
                         imageView.setImageBitmap(bmp);
                     }
 
@@ -224,7 +224,7 @@ public class PhotoProcessActivity extends AppCompatActivity {
                         Bitmap old = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
                         Bitmap bmp = Bitmap.createBitmap(old.getWidth(), old.getHeight(),
                                 Bitmap.Config.ARGB_8888);
-                        float contrast = (float) ((progress + 64) / 128.0);
+                        float contrast = (float) ((progress + 63) / 128);
                         ColorMatrix cMatrix = new ColorMatrix();
                         cMatrix.set(new float[] { contrast, 0, 0, 0, 0, 0,
                                 contrast, 0, 0, 0,
@@ -234,7 +234,7 @@ public class PhotoProcessActivity extends AppCompatActivity {
                         paint.setColorFilter(new ColorMatrixColorFilter(cMatrix));
 
                         Canvas canvas = new Canvas(bmp);
-                        canvas.drawBitmap(old, 0, 0, paint);
+                        canvas.drawBitmap(oriBitmap, 0, 0, paint);
                         imageView.setImageBitmap(bmp);
                     }
 

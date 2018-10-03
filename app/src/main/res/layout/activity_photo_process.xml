@@ -6,9 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.PhotoProcessActivity">
-    <LinearLayout android:orientation="horizontal"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/filter1"
@@ -39,8 +41,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Saturation" />
+            android:text="Saturation"
+            android:textStyle="bold" />
 
         <SeekBar
             android:id="@+id/saturationSeekbar"
@@ -49,6 +51,7 @@
             android:max="200"
             android:progress="100" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -58,8 +61,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Brightness" />
+            android:text="Brightness"
+            android:textStyle="bold" />
 
         <SeekBar
             android:id="@+id/brightnessSeekbar"
@@ -68,6 +71,7 @@
             android:max="255"
             android:progress="127" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -77,8 +81,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Contrast" />
+            android:text="Contrast"
+            android:textStyle="bold" />
 
         <SeekBar
             android:id="@+id/contrastSeekbar"
@@ -88,9 +92,10 @@
             android:progress="63" />
     </LinearLayout>
 
-    <LinearLayout android:orientation="horizontal"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/crop_image"
@@ -113,8 +118,7 @@
 
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/IvImage"
-        />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>
