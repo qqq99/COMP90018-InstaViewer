@@ -41,6 +41,9 @@ public class PhotoProcessActivity extends AppCompatActivity {
     private String oriImagePath;
     private SeekBar saturationSeekBar, brightnessSeekBar, contrastSeekBar;
 
+
+
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
