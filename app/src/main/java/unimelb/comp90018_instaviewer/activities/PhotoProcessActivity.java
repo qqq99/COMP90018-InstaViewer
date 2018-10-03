@@ -41,9 +41,6 @@ public class PhotoProcessActivity extends AppCompatActivity {
     private String oriImagePath;
     private SeekBar saturationSeekBar, brightnessSeekBar, contrastSeekBar;
 
-
-
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -224,7 +221,7 @@ public class PhotoProcessActivity extends AppCompatActivity {
                         Bitmap old = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
                         Bitmap bmp = Bitmap.createBitmap(old.getWidth(), old.getHeight(),
                                 Bitmap.Config.ARGB_8888);
-                        float contrast = (float) ((progress + 63) / 128);
+                        float contrast = (float) ((progress + 64) / 128);
                         ColorMatrix cMatrix = new ColorMatrix();
                         cMatrix.set(new float[] { contrast, 0, 0, 0, 0, 0,
                                 contrast, 0, 0, 0,
