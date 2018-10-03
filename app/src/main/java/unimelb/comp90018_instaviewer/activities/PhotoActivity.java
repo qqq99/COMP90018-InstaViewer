@@ -29,8 +29,10 @@ public class PhotoActivity extends AppCompatActivity {
         Intent fromIntent = getIntent();
         if (fromIntent != null) {
             String imageSavedPath = fromIntent.getStringExtra("imageSavedPath");
-            Toast.makeText(PhotoActivity.this,
-                    "Processed image has been saved to path: " + imageSavedPath, Toast.LENGTH_LONG).show();
+            if (imageSavedPath != null) {
+                Toast.makeText(PhotoActivity.this,
+                        "Processed image has been saved to path: " + imageSavedPath, Toast.LENGTH_LONG).show();
+            }
         }
 
         PhotoOrCropUtil.getInstance().setAlbumAndCameraCallback(new PhotoOrCropUtil.PhotoOrCropListener() {
