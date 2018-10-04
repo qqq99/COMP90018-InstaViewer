@@ -1,24 +1,27 @@
 package unimelb.comp90018_instaviewer.activities;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
 import unimelb.comp90018_instaviewer.R;
+import unimelb.comp90018_instaviewer.utilities.PermissionUtil;
 import unimelb.comp90018_instaviewer.utilities.PhotoOrCropUtil;
 
+import static unimelb.comp90018_instaviewer.utilities.PermissionUtil.MY_PERMISSIONS_REQUEST_CAMERA;
+import static unimelb.comp90018_instaviewer.utilities.PermissionUtil.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE;
+import static unimelb.comp90018_instaviewer.utilities.PermissionUtil.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE;
+import static unimelb.comp90018_instaviewer.utilities.PermissionUtil.checkCamera;
+import static unimelb.comp90018_instaviewer.utilities.PermissionUtil.checkWriteStorage;
+
 public class PhotoActivity extends AppCompatActivity {
-    public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+    private final String TAG = "PhotoActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,56 +51,16 @@ public class PhotoActivity extends AppCompatActivity {
         });
     }
 
-    public boolean checkPermissionREAD_EXTERNAL_STORAGE(final Context context) {
-        int currentAPIVersion = Build.VERSION.SDK_INT;
-        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        (Activity) context,
-                        Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    showDialog("External storage", context, Manifest.permission.READ_EXTERNAL_STORAGE);
-                } else {
-                    ActivityCompat.requestPermissions(
-                            (Activity) context,
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                }
-                return false;
-            } else {
-                return true;
-            }
-
-        } else {
-            return true;
-        }
-    }
-
-    public void showDialog(final String msg, final Context context,
-                           final String permission) {
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
-        alertBuilder.setCancelable(true);
-        alertBuilder.setTitle("Permission necessary");
-        alertBuilder.setMessage(msg + " permission is necessary");
-        alertBuilder.setPositiveButton(android.R.string.yes,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions((Activity) context,
-                                new String[]{permission},
-                                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                    }
-                });
-        AlertDialog alert = alertBuilder.create();
-        alert.show();
-    }
-
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fromCamera:
-                PhotoOrCropUtil.getInstance().camera();
+                if (PermissionUtil.checkWriteStorage(this)
+                        && PermissionUtil.checkCamera(this)) {
+                    PhotoOrCropUtil.getInstance().camera();
+                }
                 break;
             case R.id.fromAlbum:
-                if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
+                if (PermissionUtil.checkReadStorage(this)) {
                     PhotoOrCropUtil.getInstance().album();
                 }
                 break;
@@ -111,7 +74,23 @@ public class PhotoActivity extends AppCompatActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     PhotoOrCropUtil.getInstance().album();
                 } else {
-                    Toast.makeText(PhotoActivity.this, "GET_ACCOUNTS Denied",
+                    Toast.makeText(PhotoActivity.this, "Read storage permission denied",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case MY_PERMISSIONS_REQUEST_CAMERA:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    launchCamera();
+                } else {
+                    Toast.makeText(PhotoActivity.this, "Camera permission denied",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    launchCamera();
+                } else {
+                    Toast.makeText(PhotoActivity.this, "Write permission denied",
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -125,5 +104,16 @@ public class PhotoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         PhotoOrCropUtil.getInstance().onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * Launches the camera (while ensuring that permissions required for camera are granted)
+     */
+    private void launchCamera() {
+        if (checkCamera(this) && checkWriteStorage(this)) {
+            PhotoOrCropUtil.getInstance().camera();
+        } else {
+            Log.i(TAG, "Not all permissions are granted for using camera");
+        }
     }
 }
