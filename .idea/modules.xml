@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/COMP90018_InstaViewer.iml" filepath="$PROJECT_DIR$/COMP90018_InstaViewer.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/COMP90018_InstaViewer.iml" filepath="$PROJECT_DIR$/.idea/COMP90018_InstaViewer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

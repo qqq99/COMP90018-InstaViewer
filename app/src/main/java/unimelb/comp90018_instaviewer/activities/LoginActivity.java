@@ -56,6 +56,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Go to HomeActivity
+     */
+    private void goToHome() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -95,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_LONG).show();
                             authProcess.setAuthDetails(user);
                             authProcess.run();
-
+                            goToHome();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
