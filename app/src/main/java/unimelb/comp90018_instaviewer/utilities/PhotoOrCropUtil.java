@@ -216,6 +216,10 @@ public class PhotoOrCropUtil {
         void uploadAvatar(String imageFilePath);
     }
 
+    public void showToast(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
     private void showToast(String message) {
         Toast.makeText(albumAndCameraContext, message, Toast.LENGTH_SHORT).show();
     }
