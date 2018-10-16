@@ -18,18 +18,17 @@
         tools:replace="android:allowBackup">
         <activity
             android:name=".activities.PhotoActivity"
-            android:theme="@style/MyAppTheme"/>
+            android:theme="@style/MyAppTheme" />
         <activity
             android:name=".activities.HomeActivity"
-            android:label="@string/title_activity_home"
             android:theme="@style/MyAppTheme">
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
 
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".activities.LoginActivity">
 
@@ -56,12 +55,16 @@
         <activity
             android:name=".activities.SelectPhotoActivity"
             android:theme="@style/MyAppTheme">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.UploadActivity"
+            android:label="@string/title_activity_upload"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

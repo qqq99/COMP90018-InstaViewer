@@ -58,8 +58,9 @@ public class GalleryFragment extends Fragment {
 
                     fragmentListener.onGalleryImageSelected(imagePath);
                     Glide.with(getActivity()).load(imagePath)
-                            .apply(RequestOptions.centerCropTransform())
-                            .into(galleryImagePreview);
+//                            .apply(RequestOptions.)
+                            .into(galleryImagePreview
+                            );
                 }
             }
         });
@@ -106,7 +107,7 @@ public class GalleryFragment extends Fragment {
             if (convertView == null) {
                 imageView = new ImageView(context);
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setLayoutParams(new GridView.LayoutParams(270, 270));
+                imageView.setLayoutParams(new GridView.LayoutParams(200, 200));
             } else {
                 imageView = (ImageView) convertView;
             }
@@ -163,7 +164,7 @@ public class GalleryFragment extends Fragment {
                 if (i == 0) {
                     fragmentListener.onGalleryImageSelected(imagePath);
                     Glide.with(activity).load(imagePath)
-                            .apply(RequestOptions.centerCropTransform())
+//                            .apply(RequestOptions.centerCropTransform())
                             .into(galleryImagePreview);
                 }
             }

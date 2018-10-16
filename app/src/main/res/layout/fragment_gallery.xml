@@ -6,15 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".fragments.GalleryFragment">
 
-    <ImageView
-        android:id="@+id/imageGalleryPreview"
+    <ScrollView
+        android:id="@+id/scrollViewPreview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintDimensionRatio="1:0.75"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/gridGalleryPicker" />
+        app:layout_constraintBottom_toTopOf="@id/gridGalleryPicker">
+
+        <ImageView
+            android:id="@+id/imageGalleryPreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop" />
+
+    </ScrollView>
+    <!--<ImageView-->
+        <!--android:id="@+id/imageGalleryPreview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--app:layout_constraintDimensionRatio="1:1"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintBottom_toTopOf="@id/gridGalleryPicker" />-->
 
     <GridView
         android:id="@+id/gridGalleryPicker"
@@ -25,6 +43,6 @@
         android:horizontalSpacing="0dp"
         android:stretchMode="columnWidth"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/imageGalleryPreview" />
+        app:layout_constraintTop_toBottomOf="@id/scrollViewPreview" />
 
 </android.support.constraint.ConstraintLayout>

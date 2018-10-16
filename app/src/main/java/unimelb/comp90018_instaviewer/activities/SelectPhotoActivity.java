@@ -80,6 +80,9 @@ public class SelectPhotoActivity extends AppCompatActivity implements GalleryFra
 
         if (id == R.id.navigation_next) {
             Timber.d("Going to edit image with path: " + gallerySelectedImage);
+            Intent intent = new Intent(SelectPhotoActivity.this, UploadActivity.class);
+            intent.putExtra(UploadActivity.UPLOAD_IMAGE_EXTRA, gallerySelectedImage);
+            startActivity(intent);
             return true;
         }
 
@@ -119,6 +122,7 @@ public class SelectPhotoActivity extends AppCompatActivity implements GalleryFra
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
+        /* TODO: Check for permission when accessing photo library */
         adapter.addFragment(galleryFragment, "Library");
         adapter.addFragment(cameraFragment, "Photo");
 
