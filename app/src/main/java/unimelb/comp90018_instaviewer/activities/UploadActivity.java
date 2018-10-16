@@ -17,6 +17,7 @@ import timber.log.Timber;
 import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.models.Callback;
 import unimelb.comp90018_instaviewer.utilities.FirebaseUtil;
+import unimelb.comp90018_instaviewer.utilities.Redirection;
 
 public class UploadActivity extends AppCompatActivity {
 
@@ -68,6 +69,7 @@ public class UploadActivity extends AppCompatActivity {
         FirebaseUtil.uploadImage(imagePathToUpload, new Callback() {
             @Override
             public void onSuccess(Object o) {
+                Redirection.redirectToHome(UploadActivity.this);
                 Timber.d("Successfully uploaded image, result: " + o.toString());
             }
 
