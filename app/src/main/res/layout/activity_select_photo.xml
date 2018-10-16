@@ -4,40 +4,115 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.SelectPhotoActivity"
-    android:theme="@style/MyAppTheme">
+    tools:context=".activities.SelectPhotoActivity">
 
-    <ImageView
-        android:id="@+id/imageGalleryPreview"
+    <!--<ImageView-->
+        <!--android:id="@+id/imageGalleryPreview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--app:layout_constraintDimensionRatio="1:1"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPagerSelectPhoto"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintBottom_toTopOf="@+id/layoutSelectPhotoFragment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/layoutSelectPhotoFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/navigationSelectPhoto"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageGalleryPreview">
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigationSelectPhoto"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="false"
-        android:background="?android:attr/windowBackground"
-        app:itemIconTint="@drawable/bottom_navigation_selector"
-        app:labelVisibilityMode="labeled"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tabLayoutSelectPhoto"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/select_photo" />
+        >
+
+        <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:id="@+id/layoutSelectPhotoFragment"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/imageGalleryPreview"></android.support.constraint.ConstraintLayout>-->
+
+    </android.support.v4.view.ViewPager>
+
+    <!--<android.support.design.widget.BottomNavigationView-->
+    <!--android:id="@+id/navigationSelectPhoto"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:animateLayoutChanges="false"-->
+    <!--android:background="?android:attr/windowBackground"-->
+    <!--app:itemIconTint="@drawable/bottom_navigation_selector"-->
+    <!--app:labelVisibilityMode="labeled"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintRight_toRightOf="parent"-->
+    <!--app:menu="@menu/select_photo" />-->
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimaryDark"/>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayoutSelectPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/viewPagerSelectPhoto"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!--<android.support.design.widget.TabItem-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Library" />-->
+
+        <!--<android.support.design.widget.TabItem-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Photo" />-->
+
+    </android.support.design.widget.TabLayout>
+
+    <!--<android.support.design.widget.TabLayout-->
+    <!--android:id="@+id/tabSelectPhoto"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:layout_constraintTop_toBottomOf="@id/viewPagerSelectPhoto"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:tabGravity="fill"-->
+    <!--app:tabMode="fixed" />-->
+
+    <!--<android.support.design.widget.TabLayout-->
+    <!--android:id="@+id/tabSelectPhoto"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
+
+    <!--<android.support.design.widget.TabItem-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Left" />-->
+
+    <!--<android.support.design.widget.TabItem-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Center" />-->
+
+    <!--<android.support.design.widget.TabItem-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Right" />-->
+    <!--</android.support.design.widget.TabLayout>-->
 
 </android.support.constraint.ConstraintLayout>

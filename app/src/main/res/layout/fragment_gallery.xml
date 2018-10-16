@@ -6,15 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".fragments.GalleryFragment">
 
+    <ImageView
+        android:id="@+id/imageGalleryPreview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/gridGalleryPicker" />
+
     <GridView
         android:id="@+id/gridGalleryPicker"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:numColumns="4"
         android:verticalSpacing="0dp"
         android:horizontalSpacing="0dp"
-
         android:stretchMode="columnWidth"
-        android:gravity="center" />
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/imageGalleryPreview" />
 
 </android.support.constraint.ConstraintLayout>

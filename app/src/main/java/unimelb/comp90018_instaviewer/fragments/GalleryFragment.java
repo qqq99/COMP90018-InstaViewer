@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import timber.log.Timber;
 import unimelb.comp90018_instaviewer.R;
+import unimelb.comp90018_instaviewer.activities.SelectPhotoActivity;
 
 public class GalleryFragment extends Fragment {
 
@@ -29,6 +30,8 @@ public class GalleryFragment extends Fragment {
     private ArrayList<String> images;
 
     private OnGalleryImageSelectedListener fragmentListener;
+
+    private ImageView galleryImagePreview;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,7 @@ public class GalleryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
         GridView gallery = view.findViewById(R.id.gridGalleryPicker);
+        galleryImagePreview = view.findViewById(R.id.imageGalleryPreview);
         gallery.setAdapter(new ImageAdapter(getActivity()));
 
         gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -51,7 +55,11 @@ public class GalleryFragment extends Fragment {
                     Toast.makeText(getActivity(),
                             "position " + position + " " + imagePath,
                             Toast.LENGTH_SHORT).show();
+
                     fragmentListener.onGalleryImageSelected(imagePath);
+                    Glide.with(getActivity()).load(imagePath)
+                            .apply(RequestOptions.centerCropTransform())
+                            .into(galleryImagePreview);
                 }
             }
         });
@@ -76,32 +84,8 @@ public class GalleryFragment extends Fragment {
 
         ImageAdapter(Context c) {
             context = (Activity) c;
-
-            System.out.println("About to get images");
             images = getImages(context);
             Timber.i("Finished getting images");
-
-//            images = new ArrayList<>(Arrays.asList(
-//                    R.drawable.googleg_standard_color_18,
-//                    R.drawable.ic_add_circle_black_24dp,
-//                    R.drawable.ic_dashboard_black_24dp,
-//                    R.drawable.ic_launcher_foreground,
-//                    R.drawable.common_google_signin_btn_icon_dark_focused,
-//                    R.drawable.googleg_standard_color_18,
-//                    R.drawable.ic_add_circle_black_24dp,
-//                    R.drawable.ic_dashboard_black_24dp,
-//                    R.drawable.ic_launcher_foreground,
-//                    R.drawable.common_google_signin_btn_icon_dark_focused,
-//                    R.drawable.googleg_standard_color_18,
-//                    R.drawable.ic_add_circle_black_24dp,
-//                    R.drawable.ic_dashboard_black_24dp,
-//                    R.drawable.ic_launcher_foreground,
-//                    R.drawable.common_google_signin_btn_icon_dark_focused,
-//                    R.drawable.googleg_standard_color_18,
-//                    R.drawable.ic_add_circle_black_24dp,
-//                    R.drawable.ic_dashboard_black_24dp,
-//                    R.drawable.ic_launcher_foreground,
-//                    R.drawable.common_google_signin_btn_icon_dark_focused));
         }
 
         public int getCount() {
@@ -153,7 +137,10 @@ public class GalleryFragment extends Fragment {
 
             //Stores all the images from the gallery in Cursor
             Cursor cursor = activity.getContentResolver().query(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, selection, selectionArgs, orderBy);
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null , orderBy);
+//            Cursor cursor = activity.getContentResolver().query(
+//                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, selection, selectionArgs, orderBy);
+
 
             //Total number of images
             int count = cursor.getCount();
@@ -175,9 +162,13 @@ public class GalleryFragment extends Fragment {
                 /* Set first image to be the preview */
                 if (i == 0) {
                     fragmentListener.onGalleryImageSelected(imagePath);
+                    Glide.with(activity).load(imagePath)
+                            .apply(RequestOptions.centerCropTransform())
+                            .into(galleryImagePreview);
                 }
             }
 
+            cursor.close();
             return paths;
         }
     }
