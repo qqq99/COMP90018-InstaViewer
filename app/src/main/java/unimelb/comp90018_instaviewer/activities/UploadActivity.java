@@ -15,10 +15,14 @@ import com.bumptech.glide.request.RequestOptions;
 
 import timber.log.Timber;
 import unimelb.comp90018_instaviewer.R;
+import unimelb.comp90018_instaviewer.models.Callback;
+import unimelb.comp90018_instaviewer.utilities.FirebaseUtil;
 
 public class UploadActivity extends AppCompatActivity {
 
     public static final String UPLOAD_IMAGE_EXTRA = "Upload image path";
+
+    String imagePathToUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,7 @@ public class UploadActivity extends AppCompatActivity {
 
         /* Initialize preview of image to upload */
         ImageView previewImage = findViewById(R.id.imgUploadPreview);
-        String imagePathToUpload = getIntent().getStringExtra(UPLOAD_IMAGE_EXTRA);
+        imagePathToUpload = getIntent().getStringExtra(UPLOAD_IMAGE_EXTRA);
         Glide.with(UploadActivity.this).load(imagePathToUpload)
                 .apply(RequestOptions.centerCropTransform())
                 .into(previewImage);
@@ -50,10 +54,28 @@ public class UploadActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.navigation_share) {
+            uploadPost();
+            return true;
+        } else if (id == android.R.id.home) {
+            onBackPressed();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void uploadPost() {
+        FirebaseUtil.uploadImage(imagePathToUpload, new Callback() {
+            @Override
+            public void onSuccess(Object o) {
+                Timber.d("Successfully uploaded image, result: " + o.toString());
+            }
+
+            @Override
+            public void onFailure(Object o) {
+                Timber.d("Failed to upload image, result: " + o.toString());
+            }
+        });
     }
 
 }

@@ -84,6 +84,9 @@ public class SelectPhotoActivity extends AppCompatActivity implements GalleryFra
             intent.putExtra(UploadActivity.UPLOAD_IMAGE_EXTRA, gallerySelectedImage);
             startActivity(intent);
             return true;
+        } else if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

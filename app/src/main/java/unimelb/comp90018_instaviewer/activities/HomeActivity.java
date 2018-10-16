@@ -1,5 +1,6 @@
 package unimelb.comp90018_instaviewer.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -25,7 +26,9 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.navigation_search:
                     return true;
                 case R.id.navigation_post:
-                    fm.beginTransaction().replace(R.id.layoutSelectPhotoFragment, photoFragment).commit();
+                    // fm.beginTransaction().replace(R.id.layoutSelectPhotoFragment, photoFragment).commit();
+                    Intent intent = new Intent(HomeActivity.this, SelectPhotoActivity.class);
+                    startActivity(intent);
                     return true;
                 case R.id.navigation_activity_feed:
                     return true;
