@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new FeedAdapter(mDataset);
+        mAdapter = new FeedAdapter(mDataset, getContext());
         mRecyclerView.setAdapter(mAdapter);
 
         // Inflate the layout for this fragment
