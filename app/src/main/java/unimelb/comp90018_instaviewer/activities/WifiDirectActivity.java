@@ -346,7 +346,15 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
             @Override
             public void onConnectionInfoAvailable(WifiP2pInfo info) {
                 wifiP2pInfo = info;
-                statusView.setText("Connected To: " + info.groupOwnerAddress.getHostAddress());
+                if (info.groupFormed && info.isGroupOwner) {
+                    statusView.setText("Be Connected by " + info.groupOwnerAddress.getHostAddress());
+                    btnUpload.setVisibility(View.GONE);
+                    btnSend.setVisibility(View.GONE);
+                } else if (info.groupFormed) {
+                    statusView.setText("Connected to " + info.groupOwnerAddress.getHostAddress());
+                    btnUpload.setVisibility(View.VISIBLE);
+                    btnSend.setVisibility(View.VISIBLE);
+                }
             }
         };
 
