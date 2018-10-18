@@ -334,19 +334,8 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
                     peers.clear();
                     peers.addAll(refreshedPeers);
                     deviceNames.clear();
-                    devices = new WifiP2pDevice[refreshedPeers.size()];
+                    devices = getFollowers(refreshedPeers);
 
-                    int index = 0;
-                    for (WifiP2pDevice device : refreshedPeers) {
-                        /*
-                           an if-else statement should be added here in order to list only
-                           current users'friends
-                        */
-
-                        deviceNames.add(device.deviceName + ": " + device.deviceAddress);
-                        devices[index] = device;
-                        index++;
-                    }
                     arrayAdapter.notifyDataSetChanged();
                 }
 
@@ -400,6 +389,24 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
                 return true;
             }
         });
+    }
+    /* Rio's code later */
+    private WifiP2pDevice[] getFollowers(Collection<WifiP2pDevice> refreshedPeers) {
+        WifiP2pDevice[] followers = new WifiP2pDevice[refreshedPeers.size()];
+        int index = 0;
+
+        for (WifiP2pDevice device : refreshedPeers) {
+            /*
+               an if-else statement should be added here in order to list only
+               current users'friends
+            */
+
+            deviceNames.add(device.deviceName + ": " + device.deviceAddress);
+            followers[index] = device;
+            index++;
+        }
+
+        return followers;
     }
 
     public class ClientSocketHandler extends Thread {
