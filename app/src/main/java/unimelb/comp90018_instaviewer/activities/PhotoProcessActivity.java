@@ -1,10 +1,5 @@
 package unimelb.comp90018_instaviewer.activities;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,9 +9,6 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,10 +18,12 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.utilities.ImageFilters;
+import unimelb.comp90018_instaviewer.utilities.PermissionUtil;
 import unimelb.comp90018_instaviewer.utilities.PhotoOrCropUtil;
 
+import static unimelb.comp90018_instaviewer.utilities.PermissionUtil.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE;
+
 public class PhotoProcessActivity extends AppCompatActivity {
-    public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 124;
     private Button btn1, btn2, btn3;
     private Button cropImage, resetImage, doneWithImage;
 
@@ -246,7 +240,7 @@ public class PhotoProcessActivity extends AppCompatActivity {
     }
 
     public void cropImage(View view) {
-        if (checkPermissionWRITE_EXTERNAL_STORAGE(this)) {
+        if (PermissionUtil.checkWriteStorage(this)) {
             PhotoOrCropUtil.getInstance().cropImage(imageView);
         }
     }
@@ -255,49 +249,6 @@ public class PhotoProcessActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         PhotoOrCropUtil.getInstance().onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    public boolean checkPermissionWRITE_EXTERNAL_STORAGE(final Context context) {
-        int currentAPIVersion = Build.VERSION.SDK_INT;
-        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(
-                        (Activity) context,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    showDialog("External storage", context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                } else {
-                    ActivityCompat.requestPermissions(
-                            (Activity) context,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-                }
-                return false;
-            } else {
-                return true;
-            }
-
-        } else {
-            return true;
-        }
-    }
-
-    public void showDialog(final String msg, final Context context,
-                           final String permission) {
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
-        alertBuilder.setCancelable(true);
-        alertBuilder.setTitle("Permission necessary");
-        alertBuilder.setMessage(msg + " permission is necessary");
-        alertBuilder.setPositiveButton(android.R.string.yes,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions((Activity) context,
-                                new String[]{permission},
-                                MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-                    }
-                });
-        AlertDialog alert = alertBuilder.create();
-        alert.show();
     }
 
     @Override
