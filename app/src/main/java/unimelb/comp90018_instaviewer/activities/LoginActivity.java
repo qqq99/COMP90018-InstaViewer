@@ -24,6 +24,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.utilities.Authentication;
+import unimelb.comp90018_instaviewer.utilities.Redirection;
 
 public class LoginActivity extends AppCompatActivity {
     private final String TAG = "Login";
@@ -60,8 +61,9 @@ public class LoginActivity extends AppCompatActivity {
      * Go to HomeActivity
      */
     private void goToHome() {
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
+        Redirection.redirectToHome(LoginActivity.this);
+//        Intent intent = new Intent(this, HomeActivity.class);
+//        startActivity(intent);
     }
 
     private void signIn() {

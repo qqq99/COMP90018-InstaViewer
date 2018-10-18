@@ -29,7 +29,7 @@ public class PhotoOrCropUtil {
     private static final String TAG = "PhotoOrCropUtil";
 
     private static final int PHOTO_REQUEST_GALLERY = 1;
-    private static final int PHOTO_REQUEST_CAREMA = 2;
+    private static final int PHOTO_REQUEST_CAMERA = 2;
     private static final int PHOTO_REQUEST_CUT = 3;
     private static PhotoOrCropUtil UTIL_INSTANCE = new PhotoOrCropUtil();
 
@@ -88,7 +88,7 @@ public class PhotoOrCropUtil {
             Uri uri = Uri.fromFile(tempFileForCamera);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
-        ((Activity) albumAndCameraContext).startActivityForResult(intent, PHOTO_REQUEST_CAREMA);
+        ((Activity) albumAndCameraContext).startActivityForResult(intent, PHOTO_REQUEST_CAMERA);
     }
 
     private void crop(Uri uri, int w, int h) {
@@ -162,7 +162,7 @@ public class PhotoOrCropUtil {
                 }
                 this.albumAndCameraListener.uploadAvatar(this.getRealFilePath(this.albumAndCameraContext, Uri.parse("file://" + sb.toString())));
             }
-        } else if (requestCode == PHOTO_REQUEST_CAREMA) {
+        } else if (requestCode == PHOTO_REQUEST_CAMERA) {
             if (hasSdcard()) {
                 Uri uri = Uri.fromFile(tempFileForCamera);
                 if (tempFileForCamera.exists()) {
