@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -28,11 +29,14 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.yalantis.ucrop.UCrop;
 import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +96,7 @@ public class PhotoEditActivity extends AppCompatActivity implements PhotoFilters
         ButterKnife.bind(this);
 
         imagePath = getIntent().getStringExtra(IMAGE_PATH_ARGUMENT);
+        Timber.d("Image path passed to PhotoEditActivity: " + imagePath);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -246,7 +251,16 @@ public class PhotoEditActivity extends AppCompatActivity implements PhotoFilters
             saveImageToGallery();
             return true;
         } else if (id == R.id.navigation_crop) {
-            // TODO
+            Timber.d("Cropping...");
+            Uri uri = Uri.parse("file://" + imagePath);
+
+            String croppedFilePath = imagePath.replace(".jpg", "") + "_cropped_" + System.currentTimeMillis() + ".jpg";
+            Uri destinationUri = Uri.parse(croppedFilePath);
+            Timber.d("Destination uri: " + destinationUri);
+
+            UCrop.of(uri, destinationUri)
+                    .start(PhotoEditActivity.this);
+            Timber.d("Cropping...?");
             return true;
         } else if (id == R.id.navigation_next) {
             loadImageUpload();
@@ -263,6 +277,28 @@ public class PhotoEditActivity extends AppCompatActivity implements PhotoFilters
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == SELECT_GALLERY_IMAGE) {
             Bitmap bitmap = BitmapUtils.getBitmapFromGallery(this, data.getData(), 800, 800);
+
+            // clear bitmap memory
+            originalImage.recycle();
+            finalImage.recycle();
+            finalImage.recycle();
+
+            originalImage = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+            filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
+            finalImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
+            imagePreview.setImageBitmap(originalImage);
+            bitmap.recycle();
+
+            // render selected image thumbnails
+            filtersListFragment.prepareThumbnail(originalImage, imagePath);
+//        } else if (resultCode == RESULT_OK && requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+        } else if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+//                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            final Uri imageUri = UCrop.getOutput(data);
+
+            imagePath = imageUri.getPath();
+
+            Bitmap bitmap = BitmapUtils.getBitmapFromGallery(this, imagePath, 800, 800);
 
             // clear bitmap memory
             originalImage.recycle();

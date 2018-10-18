@@ -75,7 +75,7 @@ public class PhotoFiltersFragment extends Fragment implements ThumbnailsAdapter.
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         int space = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8,
                 getResources().getDisplayMetrics());
-//        recyclerView.addItemDecoration(new SpacesItemDecoration(space));
+        recyclerView.addItemDecoration(new SpacesItemDecoration(space));
         recyclerView.setAdapter(mAdapter);
 
         String imagePath = getArguments().getString(IMAGE_PATH_ARGUMENT);

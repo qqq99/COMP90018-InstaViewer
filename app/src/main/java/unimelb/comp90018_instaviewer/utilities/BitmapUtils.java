@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import timber.log.Timber;
+
 /**
  * Taken from https://www.androidhive.info/2017/11/android-building-image-filters-like-instagram/
  */
@@ -62,6 +64,9 @@ public class BitmapUtils {
      * @return
      */
     public static Bitmap getBitmapFromGallery(Context context, Uri path, int width, int height) {
+
+        Timber.d("Getting bitmap from gallery: " + path);
+
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
         Cursor cursor = context.getContentResolver().query(path, filePathColumn, null, null, null);
         cursor.moveToFirst();

@@ -67,6 +67,12 @@
         <activity
             android:name=".activities.PhotoEditActivity"
             android:theme="@style/MyAppTheme" />
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/MyAppTheme"/>
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyAppTheme"/>
     </application>
 
 </manifest>
