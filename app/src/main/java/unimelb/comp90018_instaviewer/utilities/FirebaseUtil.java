@@ -20,6 +20,35 @@ import timber.log.Timber;
 import unimelb.comp90018_instaviewer.models.Callback;
 
 public class FirebaseUtil {
+    public static void uploadImage(Bitmap bitmap, final Callback callback) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        /* Make filename */
+        String userId = auth.getCurrentUser().getUid();
+        Long currentTime = System.currentTimeMillis();
+        String uploadFilePath = userId + "-" + currentTime + ".jpg";
+        final StorageReference storageRef = storage.getReference().child(uploadFilePath);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = storageRef.putBytes(data);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                getDownloadUrl(storageRef, callback);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Timber.d("Failed to upload image: " + e.getMessage());
+                callback.onFailure(e);
+            }
+        });
+    }
+
     public static void uploadImage(String path, final Callback callback) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();

@@ -80,9 +80,10 @@ public class SelectPhotoActivity extends AppCompatActivity implements GalleryFra
 
         if (id == R.id.navigation_next) {
             Timber.d("Going to edit image with path: " + gallerySelectedImage);
-            Intent intent = new Intent(SelectPhotoActivity.this, UploadActivity.class);
-            intent.putExtra(UploadActivity.UPLOAD_IMAGE_EXTRA, gallerySelectedImage);
-            startActivity(intent);
+            loadPhotoEditActivity(gallerySelectedImage);
+//            Intent intent = new Intent(SelectPhotoActivity.this, UploadActivity.class);
+//            intent.putExtra(UploadActivity.UPLOAD_IMAGE_EXTRA, gallerySelectedImage);
+//            startActivity(intent);
             return true;
         } else if (id == android.R.id.home) {
             onBackPressed();
@@ -102,22 +103,15 @@ public class SelectPhotoActivity extends AppCompatActivity implements GalleryFra
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Timber.d("Select photo activity code: " + requestCode);
-
         switch (requestCode) {
             case REQUEST_CODE_GET_CAMERA_PHOTO:
-                Timber.d("Camera result code: " + resultCode);
-
-                Bitmap photo1 = (Bitmap) data.getExtras().get("data");
-
-                Uri tempUri1 = getImageUri(getApplicationContext(), photo1);
-                Timber.d("Camera photo1: " + getRealPathFromURI(tempUri1));
-
                 if (resultCode == Activity.RESULT_OK) {
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
-
                     Uri tempUri = getImageUri(getApplicationContext(), photo);
-                    Timber.d("Camera photo: " + getRealPathFromURI(tempUri));
+                    String imagePath = getRealPathFromURI(tempUri);
+                    Timber.d("Camera photo path: " + imagePath);
+
+                    loadPhotoEditActivity(imagePath);
                 }
         }
     }
@@ -151,6 +145,12 @@ public class SelectPhotoActivity extends AppCompatActivity implements GalleryFra
             }
         }
         return path;
+    }
+
+    private void loadPhotoEditActivity(String imagePath) {
+        Intent intent = new Intent(SelectPhotoActivity.this, PhotoEditActivity.class);
+        intent.putExtra(PhotoEditActivity.IMAGE_PATH_ARGUMENT, imagePath);
+        startActivity(intent);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

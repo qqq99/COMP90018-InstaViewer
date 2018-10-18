@@ -15,16 +15,19 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" />
+            android:background="@android:color/white"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:padding="16dp">
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="33dp">
 
         <ImageView
             android:id="@+id/imgUploadPreview"
@@ -36,15 +39,24 @@
             android:id="@+id/textCaption"
             android:layout_width="0dp"
             android:layout_height="70dp"
+            android:layout_marginLeft="8dp"
+            android:background="@android:color/transparent"
             android:ems="10"
+            android:gravity="top|left"
             android:hint="Write a caption..."
             android:inputType="textMultiLine"
-            android:layout_marginLeft="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/imgUploadPreview"
-            app:layout_constraintTop_toTopOf="@id/imgUploadPreview"
-            android:background="@android:color/transparent"
-            android:gravity="top|left"/>
+            app:layout_constraintTop_toTopOf="@id/imgUploadPreview" />
+
+        <Switch
+            android:id="@+id/switchLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Geolocation"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/imgUploadPreview"
+            app:layout_constraintLeft_toLeftOf="@id/imgUploadPreview"/>
 
     </android.support.constraint.ConstraintLayout>
 

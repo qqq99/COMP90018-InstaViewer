@@ -78,7 +78,7 @@ public class CameraFragment extends Fragment {
     private void launchCamera() {
         if (checkCamera(getActivity()) && checkWriteStorage(getActivity())) {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent, SelectPhotoActivity.REQUEST_CODE_GET_CAMERA_PHOTO);
+            getActivity().startActivityForResult(intent, SelectPhotoActivity.REQUEST_CODE_GET_CAMERA_PHOTO);
         } else {
             Timber.d("Not all permissions are granted for using camera");
         }

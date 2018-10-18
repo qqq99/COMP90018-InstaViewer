@@ -26,7 +26,6 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.navigation_search:
                     return true;
                 case R.id.navigation_post:
-                    // fm.beginTransaction().replace(R.id.layoutSelectPhotoFragment, photoFragment).commit();
                     Intent intent = new Intent(HomeActivity.this, SelectPhotoActivity.class);
                     startActivity(intent);
                     return true;
