@@ -129,6 +129,7 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
         }
     }
 
+    //check write permission
     public boolean checkPermissionWRITE_EXTERNAL_STORAGE(final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
         if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
@@ -155,6 +156,7 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
         }
     }
 
+    //check read permission
     public boolean checkPermissionREAD_EXTERNAL_STORAGE(final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
         if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
@@ -180,6 +182,7 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
             return true;
         }
     }
+
 
     public void showDialog(final String msg, final Context context,
                            final String permission, final int requestCode) {
@@ -224,6 +227,7 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
         }
     }
 
+    //click the listed device
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final WifiP2pDevice device = devices[position];
@@ -233,6 +237,7 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
         p2pManager.connect(p2pChannel, config, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
+                // here the device.deviceName is subject to change, it should match the id of instagram
                 Toast.makeText(getApplicationContext(), "Connected to " + device.deviceName, Toast.LENGTH_SHORT).show();
             }
 
@@ -243,6 +248,7 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
             }
         });
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -261,11 +267,13 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
         }
     }
 
+    //choose photo from the gallery
     private void choosePhoto() {
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RESULT_LOAD_IMAGE);
     }
 
+    //behaviors of the wifi manager
     private void initDataStructures() {
         this.wifimanager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         this.p2pManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
@@ -280,12 +288,13 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
         }
 
         intentFilter = new IntentFilter();
-        intentFilter.addAction(p2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-        intentFilter.addAction(p2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        intentFilter.addAction(p2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        intentFilter.addAction(p2pManager.WIFI_P2P_STATE_CHANGED_ACTION); // when wifi switches on/off
+        intentFilter.addAction(p2pManager.WIFI_P2P_PEERS_CHANGED_ACTION); // the list of devices refreshed
+        intentFilter.addAction(p2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION); //
         intentFilter.addAction(p2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
     }
 
+    //switch of the wifi
     private void initListeners() {
         this.wifiToggle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -316,6 +325,7 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
             }
         });
 
+        // the devices in the same local network
         this.peerListListener = new WifiP2pManager.PeerListListener() {
             @Override
             public void onPeersAvailable(WifiP2pDeviceList peerList) {
@@ -328,6 +338,11 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
 
                     int index = 0;
                     for (WifiP2pDevice device : refreshedPeers) {
+                        /*
+                           an if-else statement should be added here in order to list only
+                           current users'friends
+                        */
+
                         deviceNames.add(device.deviceName + ": " + device.deviceAddress);
                         devices[index] = device;
                         index++;
@@ -342,15 +357,18 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
             }
         };
 
+        // works when connecting or connected
         this.connectionInfoListener = new WifiP2pManager.ConnectionInfoListener() {
             @Override
             public void onConnectionInfoAvailable(WifiP2pInfo info) {
                 wifiP2pInfo = info;
+                //when passively connected by others
                 if (info.groupFormed && info.isGroupOwner) {
                     statusView.setText("Be Connected by " + info.groupOwnerAddress.getHostAddress());
                     btnUpload.setVisibility(View.GONE);
                     btnSend.setVisibility(View.GONE);
-                } else if (info.groupFormed) {
+
+                } else if (info.groupFormed) {//when actively collects others
                     statusView.setText("Connected to " + info.groupOwnerAddress.getHostAddress());
                     btnUpload.setVisibility(View.VISIBLE);
                     btnSend.setVisibility(View.VISIBLE);
@@ -395,6 +413,7 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
         public void run() {
             Socket socket = new Socket();
             try {
+                // build connection
                 socket.connect(new InetSocketAddress(serviceAddress, 4545), 30000);
                 OutputStream outputStream = socket.getOutputStream();
 
@@ -443,6 +462,7 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
                 while ((len = inputstream.read(buf)) != -1) {
                     out.write(buf, 0, len);
                 }
+
                 handler.obtainMessage(STATE_MESSAGE_RECEIVED, out.toByteArray().length, -1, out.toByteArray()).sendToTarget();
                 inputstream.close();
                 client.close();
@@ -450,7 +470,6 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return null;
         }
     }
