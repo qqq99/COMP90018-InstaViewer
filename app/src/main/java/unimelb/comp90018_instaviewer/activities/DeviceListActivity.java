@@ -3,6 +3,7 @@ package unimelb.comp90018_instaviewer.activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import unimelb.comp90018_instaviewer.R;
 
 public class DeviceListActivity extends AppCompatActivity {
 
