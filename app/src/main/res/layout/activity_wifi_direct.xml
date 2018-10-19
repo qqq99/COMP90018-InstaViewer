@@ -1,56 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activities.WifiDirectActivity">
+    android:fadingEdge="vertical"
+    android:scrollbars="vertical">
 
-    <Button
-        android:id="@+id/wifi_toggle"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="WIFI" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onClick"
-        android:text="SEARCH DEVICE" />
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="SEARCH DEVICE" />
 
-    <TextView
-        android:id="@+id/status_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="waiting for connecting to devices" />
+        <TextView
+            android:id="@+id/status_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10px"
+            android:text="waiting for connecting to devices"
+            android:textAlignment="center"
+            android:textSize="36px" />
 
+        <ListView
+            android:id="@+id/lv_devices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="#00000000" />
 
-    <ListView
-        android:id="@+id/lv_devices"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <unimelb.comp90018_instaviewer.utilities.ResizableImageView
+            android:id="@+id/pic_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_img" />
+    </LinearLayout>
+</ScrollView>
 
-    <Button
-        android:id="@+id/btn_Upload"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Upload" />
-
-    <Button
-        android:id="@+id/btn_Send"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Send" />
-
-    <ImageView
-        android:id="@+id/pic_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
-        android:contentDescription="Bluetooth" />
-
-</LinearLayout>
