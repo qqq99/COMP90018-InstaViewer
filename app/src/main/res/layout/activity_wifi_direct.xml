@@ -26,6 +26,12 @@
             android:textAlignment="center"
             android:textSize="36px" />
 
+        <ListView
+            android:id="@+id/lv_devices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="#00000000" />
+
         <unimelb.comp90018_instaviewer.utilities.ResizableImageView
             android:id="@+id/pic_view"
             android:layout_width="match_parent"
@@ -33,12 +39,6 @@
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:src="@drawable/default_img" />
-
-        <ListView
-            android:id="@+id/lv_devices"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:cacheColorHint="#00000000" />
     </LinearLayout>
 </ScrollView>
 
