@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -100,6 +101,7 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
         setContentView(R.layout.activity_wifi_direct);
 
         this.statusView = findViewById(R.id.status_view);
+        this.statusView.setBackgroundColor(Color.CYAN);
         this.imageView = findViewById(R.id.pic_view);
         this.lvDevices = findViewById(R.id.lv_devices);
 
@@ -419,11 +421,11 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
             this.isSendingPhoto = true;
             synchronized (lock) {
                 Toast.makeText(WifiDirectActivity.this, "start to broadcast photo",
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_SHORT).show();
                 new PhotoSenderMonitor().start();
             }
         } else {
-            Toast.makeText(getApplicationContext(), "Last photo is broadcasting, wait for a moment", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Last photo is broadcasting, wait for a moment", Toast.LENGTH_SHORT).show();
         }
     }
 
