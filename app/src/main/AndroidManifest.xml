@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="unimelb.comp90018_instaviewer">
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -27,23 +28,21 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
         <activity android:name=".activities.PhotoActivity" />
-
         <activity android:name=".activities.WifiDirectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".activities.HomeActivity"
-            android:label="@string/title_activity_home"></activity>
+            android:label="@string/title_activity_home" />
         <activity android:name=".activities.PhotoProcessActivity" />
         <activity
             android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
             android:configChanges="orientation|screenSize" />
+        <activity android:name=".activities.DeviceListActivity"></activity>
     </application>
 
 </manifest>
