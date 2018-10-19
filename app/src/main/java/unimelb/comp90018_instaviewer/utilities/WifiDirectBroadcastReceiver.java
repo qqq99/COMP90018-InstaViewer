@@ -26,12 +26,6 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (p2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
-            int state = intent.getIntExtra(p2pManager.EXTRA_WIFI_STATE, -1);
-            if (state == p2pManager.WIFI_P2P_STATE_ENABLED) {
-                Toast.makeText(context, "Wifi is ON", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(context, "Wifi is OFF", Toast.LENGTH_SHORT).show();
-            }
         }
         else if (p2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
             p2pManager.requestPeers(p2pChannel, this.context.peerListListener);
