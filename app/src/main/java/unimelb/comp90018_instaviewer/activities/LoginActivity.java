@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private final String TAG = "Login";
     private static final int RC_SIGN_IN = 9001;
 
-    private Authentication authProcess = new Authentication();
+    private Authentication authProcess;
 
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_LONG).show();
-                            authProcess.setAuthDetails(user);
+                            authProcess = new Authentication(LoginActivity.this, user);
                             authProcess.run();
                             goToHome();
                         } else {

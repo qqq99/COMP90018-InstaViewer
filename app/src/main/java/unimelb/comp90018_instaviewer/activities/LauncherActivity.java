@@ -1,5 +1,8 @@
 package unimelb.comp90018_instaviewer.activities;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -17,42 +20,28 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.utilities.Authentication;
+import unimelb.comp90018_instaviewer.utilities.Redirection;
 
 public class LauncherActivity extends AppCompatActivity{
 
     private final String TAG = "launcher";
-    private FirebaseAuth mAuth;
-
-    private Authentication authProcess = new Authentication();
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.login_status), this.MODE_PRIVATE);
+        boolean defaultLoginStatus = getResources().getBoolean(R.bool.default_login_status);
+        boolean loginStatus = sharedPref.getBoolean(getString(R.string.login_status), defaultLoginStatus);
+
+        if (loginStatus) {
+            Redirection.redirectToHome(LauncherActivity.this);
+        } else {
+            Redirection.redirectToLogin(LauncherActivity.this);
+        }
+
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-//                            Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_LONG).show();
-                            authProcess.setAuthDetails(user);
-                            authProcess.run();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-//                            Toast.makeText(LoginActivity.this, "Failed to login", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-    }
 }
