@@ -17,6 +17,7 @@ public class PermissionUtil {
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
     public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 124;
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 125;
+    public static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 126;
 
     /**
      * General permission checking function
@@ -92,6 +93,18 @@ public class PermissionUtil {
         String message = "We need read permission to access your photos.";
         return checkPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE, message,
                 MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+    }
+
+    /**
+     * Checks for fine location permission
+     *
+     * @param context activity context
+     * @return true if permission granted, false otherwise
+     */
+    public static boolean checkFineLocation(Context context) {
+        String message = "We need read permission to access your location.";
+        return checkPermission(context, Manifest.permission.ACCESS_FINE_LOCATION, message,
+                MY_PERMISSIONS_REQUEST_FINE_LOCATION);
     }
 
     /**

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.fragments.HomeFragment;
 import unimelb.comp90018_instaviewer.fragments.PhotoFragment;
+import unimelb.comp90018_instaviewer.utilities.LocationFinder;
 
 public class HomeActivity extends AppCompatActivity {
     private FragmentManager fm = getSupportFragmentManager();

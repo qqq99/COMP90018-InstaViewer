@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -23,15 +24,17 @@ import java.util.ArrayList;
 import timber.log.Timber;
 import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.activities.SelectPhotoActivity;
+import unimelb.comp90018_instaviewer.utilities.PermissionUtil;
 
 public class GalleryFragment extends Fragment {
 
     /* List of the gallery images */
     private ArrayList<String> images;
-
     private OnGalleryImageSelectedListener fragmentListener;
 
+    private GridView gallery;
     private ImageView galleryImagePreview;
+    private Button showGalleryButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,10 +45,41 @@ public class GalleryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
-        GridView gallery = view.findViewById(R.id.gridGalleryPicker);
+        gallery = view.findViewById(R.id.gridGalleryPicker);
         galleryImagePreview = view.findViewById(R.id.imageGalleryPreview);
-        gallery.setAdapter(new ImageAdapter(getActivity()));
+        showGalleryButton = view.findViewById(R.id.btnShowGallery);
 
+        showGalleryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showGalleryImages();
+            }
+        });
+
+        showGalleryImages();
+
+        return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            fragmentListener = (OnGalleryImageSelectedListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnGalleryImageSelectedListener");
+        }
+    }
+
+    private void showGalleryImages() {
+        if (!PermissionUtil.checkReadStorage(getActivity()) || !PermissionUtil.checkWriteStorage(getActivity())) {
+            showGalleryButton.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        /* Hide button to show gallery (and prompt permission) and show gallery in grid */
+        showGalleryButton.setVisibility(View.GONE);
+        gallery.setAdapter(new ImageAdapter(getActivity()));
         gallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v,
@@ -58,23 +92,11 @@ public class GalleryFragment extends Fragment {
 
                     fragmentListener.onGalleryImageSelected(imagePath);
                     Glide.with(getActivity()).load(imagePath)
-//                            .apply(RequestOptions.)
                             .into(galleryImagePreview
                             );
                 }
             }
         });
-        return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            fragmentListener = (OnGalleryImageSelectedListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnGalleryImageSelectedListener");
-        }
     }
 
     /**
