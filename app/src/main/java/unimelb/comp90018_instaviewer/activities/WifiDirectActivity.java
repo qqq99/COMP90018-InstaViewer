@@ -342,6 +342,14 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
             public void onPeersAvailable(WifiP2pDeviceList peerList) {
                 Collection<WifiP2pDevice> refreshedPeers = peerList.getDeviceList();
                 if (!refreshedPeers.equals(peers)) {
+<<<<<<< HEAD
+                    peers.clear();
+                    peers.addAll(refreshedPeers);
+                    deviceNames.clear();
+                    devices = getFollowers(refreshedPeers);
+
+                    arrayAdapter.notifyDataSetChanged();
+=======
                     synchronized (lock) {
                         peers.clear();
                         peers.addAll(refreshedPeers);
@@ -359,6 +367,7 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
                     }
                     myAdapter.setData(deviceList);
                     myAdapter.notifyDataSetChanged();
+>>>>>>> 690297236f7edbe35e94db1aa0c7ea7df7f69387
                 }
 
                 if (peers.size() == 0) {
@@ -414,6 +423,24 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
                 return true;
             }
         });
+    }
+    /* Rio's code later */
+    private WifiP2pDevice[] getFollowers(Collection<WifiP2pDevice> refreshedPeers) {
+        WifiP2pDevice[] followers = new WifiP2pDevice[refreshedPeers.size()];
+        int index = 0;
+
+        for (WifiP2pDevice device : refreshedPeers) {
+            /*
+               an if-else statement should be added here in order to list only
+               current users'friends
+            */
+
+            deviceNames.add(device.deviceName + ": " + device.deviceAddress);
+            followers[index] = device;
+            index++;
+        }
+
+        return followers;
     }
 
     private void broadcastPhoto() {
