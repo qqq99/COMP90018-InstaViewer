@@ -22,7 +22,6 @@ import unimelb.comp90018_instaviewer.R;
 public class Authentication implements Runnable {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference users = db.collection("users");
 
     private static final String TAG = "AUTHENTICATION";
 

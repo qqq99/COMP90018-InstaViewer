@@ -7,10 +7,10 @@ public class FeedPost {
     private String mImageUrl;
     private String mMessage;
     private int mLikes;
-    private String[] mComments;
+    private int mComments;
 
 
-    public FeedPost(String mUserId, String mImageUrl, String mMessage, int mLikes, String[] mComments) {
+    public FeedPost(String mUserId, String mOwnerName, String mImageUrl, String mMessage, int mLikes, int mComments) {
         this.mUserId = mUserId;
         this.mMessage = mMessage;
         this.mOwnerName = mOwnerName;
@@ -30,4 +30,6 @@ public class FeedPost {
     public String getmMessage() {
         return mMessage;
     }
+
+    public int getmComments(){ return mComments; }
 }

@@ -77,11 +77,11 @@ dependencies {
 
     /* Dependencies for photo editing features */
     implementation 'info.androidhive:imagefilters:1.0.7'
-    compile 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    compile 'com.karumi:dexter:4.1.0'
-    compile 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
-    compile 'com.github.yalantis:ucrop:2.2.2'
+    implementation 'com.karumi:dexter:4.1.0'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
+    implementation 'com.github.yalantis:ucrop:2.2.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

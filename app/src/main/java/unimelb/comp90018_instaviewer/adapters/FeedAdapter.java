@@ -24,13 +24,21 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
     public static class FeedViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public TextView userName;
-        public ImageView picture;
-        public TextView postMessage;
+        TextView userName;
+        ImageView picture;
+        TextView postMessage;
+        ImageView likeIcon;
+        ImageView userIcon;
+        TextView comments;
 
         public FeedViewHolder(View v) {
             super(v);
-
+            userName = v.findViewById(R.id.feed_post_user);
+            picture = v.findViewById(R.id.feed_post_image);
+            postMessage = v.findViewById(R.id.feed_post_message);
+            likeIcon = v.findViewById(R.id.feed_post_like);
+            userIcon = v.findViewById(R.id.feed_post_owner_icon);
+            comments = v.findViewById(R.id.feed_post_comments);
         }
     }
 
@@ -46,10 +54,16 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         FeedPost currentPost = mDataset.get(position);
         holder.userName.setText(currentPost.getmOwnerName());
         holder.postMessage.setText(currentPost.getmMessage());
+        int numberOfComments = currentPost.getmComments();
+        if (numberOfComments > 0) {
+            holder.comments.setText(String.format("View all %d comments", numberOfComments));
+        } else {
+            holder.comments.setText("No comments");
+        }
         Glide.with(mContext)
                 .load(currentPost.getmImageUrl())
                 .apply(new RequestOptions()
-                .centerCrop())
+                .fitCenter())
                 .into(holder.picture);
 
     }
@@ -59,7 +73,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     public FeedAdapter.FeedViewHolder onCreateViewHolder(ViewGroup parent,
                                                          int viewType) {
         // create a new view
-        TextView v = (TextView) LayoutInflater.from(mContext)
+        View v = LayoutInflater.from(mContext)
                 .inflate(R.layout.feed_post, parent, false);
         FeedViewHolder vh = new FeedViewHolder(v);
         return vh;

@@ -13,18 +13,21 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/feed_post_owner_icon"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/feed_post_image"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/feed_post_owner_icon"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -35,10 +38,10 @@
         android:layout_marginLeft="8dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/feed_post_like" />
 
     <TextView
-        android:id="@+id/view_comments"
+        android:id="@+id/feed_post_comments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -49,7 +52,7 @@
         app:layout_constraintTop_toBottomOf="@+id/feed_post_message" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/feed_post_owner_icon"
         android:layout_width="@android:dimen/app_icon_size"
         android:layout_height="@android:dimen/app_icon_size"
         android:layout_marginStart="8dp"
@@ -57,10 +60,11 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/baseline_account_circle_white_48"
+        tools:srcCompat="@drawable/baseline_account_circle_white_48" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/feed_post_like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
