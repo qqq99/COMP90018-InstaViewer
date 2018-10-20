@@ -186,7 +186,6 @@ public class UploadActivity extends AppCompatActivity {
                 });
     }
 
-    @SuppressLint("MissingPermission")
     private void initLocation() {
         locationFinder = new LocationFinder(UploadActivity.this);
 //        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);

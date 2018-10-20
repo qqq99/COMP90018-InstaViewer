@@ -86,6 +86,9 @@ dependencies {
     compile 'com.karumi:dexter:4.1.0'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
     compile 'com.github.yalantis:ucrop:2.2.2'
+
+    /* Karlie/Edward */
+    implementation 'com.clj.fastble:FastBleLib:2.3.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
