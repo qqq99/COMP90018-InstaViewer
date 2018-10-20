@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.fragments.PhotoFragment;
+import unimelb.comp90018_instaviewer.utilities.LocationFinder;
 
 public class HomeActivity extends AppCompatActivity {
     private FragmentManager fm = getSupportFragmentManager();
@@ -60,8 +61,5 @@ public class HomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        ProgressBar progressBar = new ProgressBar(HomeActivity.this, null, android.R.attr.progressBarStyleSmall);
-
     }
 }

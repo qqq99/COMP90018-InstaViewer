@@ -1,23 +1,32 @@
 package unimelb.comp90018_instaviewer.activities;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.functions.FirebaseFunctionsException;
@@ -29,14 +38,20 @@ import timber.log.Timber;
 import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.models.Callback;
 import unimelb.comp90018_instaviewer.utilities.FirebaseUtil;
+import unimelb.comp90018_instaviewer.utilities.LocationFinder;
+import unimelb.comp90018_instaviewer.utilities.PermissionUtil;
 import unimelb.comp90018_instaviewer.utilities.ProgressLoading;
 import unimelb.comp90018_instaviewer.utilities.Redirection;
+
+import static unimelb.comp90018_instaviewer.utilities.PermissionUtil.MY_PERMISSIONS_REQUEST_FINE_LOCATION;
 
 public class UploadActivity extends AppCompatActivity {
     EditText editTextCaption;
     ConstraintLayout mainLayout;
-    ProgressBar progressBar;
     ProgressLoading progressLoading;
+    Switch locationSwitch;
+
+    LocationFinder locationFinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +73,11 @@ public class UploadActivity extends AppCompatActivity {
 
         editTextCaption = findViewById(R.id.textViewCaption);
         mainLayout = findViewById(R.id.layoutMain);
+        locationSwitch = findViewById(R.id.switchLocation);
 
         progressLoading = new ProgressLoading(UploadActivity.this, mainLayout);
+
+        initLocationSwitch();
     }
 
     @Override
@@ -81,6 +99,19 @@ public class UploadActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_FINE_LOCATION:
+                if (resultCode == Activity.RESULT_OK) {
+                    locationSwitch.setChecked(true);
+                    initLocation();
+                }
+        }
     }
 
     private void uploadPost() {
@@ -113,12 +144,17 @@ public class UploadActivity extends AppCompatActivity {
 
     private void uploadPostToFirebase(String caption, String imageUrl) {
         Timber.d("Uploading post to firebase...");
+        Timber.d("Location == null: " + (locationFinder.getLocation() == null ));
+        Timber.d("Location switch not checked: " + (!locationSwitch.isChecked()));
 
         Map<String, Object> data = new HashMap<>();
         data.put("userId", FirebaseAuth.getInstance().getUid());
         data.put("caption", caption);
         data.put("mediaLink", imageUrl);
-//        data.put("location", new Float[] {});
+        data.put("location", (locationFinder == null || !locationSwitch.isChecked()) ?
+                new double[] {} :
+                new double[] {locationFinder.getLat(), locationFinder.getLon()}
+        );
 
         FirebaseUtil.uploadPost(caption, imageUrl, null)
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -148,5 +184,33 @@ public class UploadActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    @SuppressLint("MissingPermission")
+    private void initLocation() {
+        locationFinder = new LocationFinder(UploadActivity.this);
+//        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    }
+
+    private void initLocationSwitch() {
+        locationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b && PermissionUtil.checkFineLocation(UploadActivity.this)) {
+                    initLocation();
+                } else {
+                    locationSwitch.setChecked(false);
+                }
+            }
+        });
+
+        /* Turn location switch on if location permission is allowed */
+        if (ContextCompat.checkSelfPermission(UploadActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationSwitch.setChecked(true);
+        } else {
+            locationSwitch.setChecked(false);
+        }
     }
 }
