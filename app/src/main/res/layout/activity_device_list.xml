@@ -13,7 +13,7 @@
         android:layout_alignParentLeft="true"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/character"
+        android:src="@drawable/ic_add_circle_black_24dp"
         />
     <TextView
         android:id="@+id/device_info"
