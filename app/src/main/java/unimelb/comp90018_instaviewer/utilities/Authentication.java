@@ -1,5 +1,7 @@
 package unimelb.comp90018_instaviewer.utilities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -15,6 +17,8 @@ import com.google.firebase.functions.HttpsCallableResult;
 import java.util.HashMap;
 import java.util.Map;
 
+import unimelb.comp90018_instaviewer.R;
+
 public class Authentication implements Runnable {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -22,31 +26,17 @@ public class Authentication implements Runnable {
 
     private static final String TAG = "AUTHENTICATION";
 
+    private Context context;
     private FirebaseUser user;
     private FirebaseFunctions mFunctions;
 
-
-    private void authenticate(){
-        db.collection("user").document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                    } else {
-                        Log.d(TAG, "No such document");
-                        user.getDisplayName();
-                        //TODO Create user in database
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
+    public Authentication(Context myContext, FirebaseUser user) {
+        this.context = myContext;
+        this.user = user;
+        mFunctions = FirebaseFunctions.getInstance();
     }
 
-    private Task<String> addUser(FirebaseUser user){
+    private Task<String> addUser(FirebaseUser user) {
         Map<String, Object> data = new HashMap<>();
         data.put("userId", user.getUid());
         data.put("name", user.getDisplayName());
@@ -66,23 +56,31 @@ public class Authentication implements Runnable {
                 });
     }
 
-    public void setAuthDetails(FirebaseUser user){
-        this.user = user;
+    private void updateLoginStatus(boolean status) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.login_status), context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        if (status) {
+            editor.putBoolean(context.getString(R.string.login_status), true);
+            editor.commit();
+        } else {
+            editor.putBoolean(context.getString(R.string.login_status), false);
+            editor.commit();
+        }
     }
+
 
     @Override
     public void run() {
-        mFunctions = FirebaseFunctions.getInstance();
         db.collection("user").document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        updateLoginStatus(true);
+                        Log.i(TAG, "DocumentSnapshot data: " + document.getData());
                     } else {
-                        Log.d(TAG, "No such document");
-
+                        Log.i(TAG, "No such document");
                         addUser(user).addOnCompleteListener(new OnCompleteListener<String>() {
                             @Override
                             public void onComplete(@NonNull Task<String> task) {
@@ -92,18 +90,23 @@ public class Authentication implements Runnable {
                                         FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
                                         FirebaseFunctionsException.Code code = ffe.getCode();
                                         Object details = ffe.getDetails();
+                                        Log.e(TAG, "Failed with Firebase Functions Exception");
                                     }
-                                    Log.d(TAG, "User failed to be created");
+                                    updateLoginStatus(false);
+                                    Log.e(TAG, "User failed to be created");
                                 } else {
-                                    Log.d(TAG, "User created successfully");
+                                    updateLoginStatus(true);
+                                    Log.i(TAG, "User created successfully");
                                 }
                             }
                         });
                     }
                 } else {
+                    updateLoginStatus(false);
                     Log.d(TAG, "get failed with ", task.getException());
                 }
             }
         });
+
     }
 }

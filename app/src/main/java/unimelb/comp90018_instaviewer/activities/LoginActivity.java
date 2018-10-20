@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private final String TAG = "Login";
     private static final int RC_SIGN_IN = 9001;
 
-    private Authentication authProcess = new Authentication();
+    private Authentication authProcess;
 
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -103,13 +103,12 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_LONG).show();
-                            authProcess.setAuthDetails(user);
+                            authProcess = new Authentication(LoginActivity.this, user);
                             authProcess.run();
                             goToHome();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-//                            Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             Toast.makeText(LoginActivity.this, "Failed to login", Toast.LENGTH_LONG).show();
                         }
                     }
