@@ -3,10 +3,8 @@ package unimelb.comp90018_instaviewer.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -17,7 +15,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,14 +26,15 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.theartofdev.edmodo.cropper.CropImage;
 import com.yalantis.ucrop.UCrop;
 import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
 
-import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,11 +46,16 @@ import unimelb.comp90018_instaviewer.fragments.PhotoEditFragment;
 import unimelb.comp90018_instaviewer.fragments.PhotoFiltersFragment;
 import unimelb.comp90018_instaviewer.utilities.BitmapUtils;
 
+import static android.os.Environment.getExternalStorageDirectory;
+
 public class PhotoEditActivity extends AppCompatActivity implements PhotoFiltersFragment.FiltersListFragmentListener, PhotoEditFragment.EditImageFragmentListener {
 
     private static final String TAG = PhotoEditActivity.class.getSimpleName();
     public static final int SELECT_GALLERY_IMAGE = 101;
     public static final String IMAGE_PATH_ARGUMENT = "Image to edit";
+
+    /* This path will store the the final image to upload (currently edited version) */
+    public static final String FINAL_IMAGE_PATH = getExternalStorageDirectory().getAbsolutePath() + "/COMP90018_final_image.jpg";
 
     private String imagePath;
 
@@ -104,6 +107,7 @@ public class PhotoEditActivity extends AppCompatActivity implements PhotoFilters
         getSupportActionBar().setTitle("");
 
         loadImage();
+        saveFinalImageToTempFile();
 
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -173,8 +177,6 @@ public class PhotoEditActivity extends AppCompatActivity implements PhotoFilters
 
     @Override
     public void onEditCompleted() {
-        // once the editing is done i.e seekbar is drag is completed,
-        // apply the values on to filtered image
         final Bitmap bitmap = filteredImage.copy(Bitmap.Config.ARGB_8888, true);
 
         Filter myFilter = new Filter();
@@ -226,12 +228,11 @@ public class PhotoEditActivity extends AppCompatActivity implements PhotoFilters
         }
     }
 
-    // load the default image from assets on app launch
+    /**
+     * Load initial image
+     */
     private void loadImage() {
         originalImage = BitmapUtils.getBitmapFromGallery(this, imagePath, 300, 300);
-
-        Timber.d("Loading bitmap from image: " + imagePath);
-
         filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         finalImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         imagePreview.setImageBitmap(originalImage);
@@ -251,16 +252,20 @@ public class PhotoEditActivity extends AppCompatActivity implements PhotoFilters
             saveImageToGallery();
             return true;
         } else if (id == R.id.navigation_crop) {
-            Timber.d("Cropping...");
-            Uri uri = Uri.parse("file://" + imagePath);
 
-            String croppedFilePath = imagePath.replace(".jpg", "") + "_cropped_" + System.currentTimeMillis() + ".jpg";
-            Uri destinationUri = Uri.parse(croppedFilePath);
-            Timber.d("Destination uri: " + destinationUri);
+            /* Always use final image to crop */
+            saveFinalImageToTempFile();
 
+            Timber.d("Cropping... ");
+
+            /* Save cropped image in the path of the final image */
+            Uri uri = Uri.parse("file://" + FINAL_IMAGE_PATH);
+            Uri destinationUri = uri;
             UCrop.of(uri, destinationUri)
                     .start(PhotoEditActivity.this);
-            Timber.d("Cropping...?");
+
+            Timber.d("Finished cropping");
+
             return true;
         } else if (id == R.id.navigation_next) {
             loadImageUpload();
@@ -366,7 +371,19 @@ public class PhotoEditActivity extends AppCompatActivity implements PhotoFilters
 
     private void loadImageUpload() {
         Intent intent = new Intent(PhotoEditActivity.this, UploadActivity.class);
-        intent.putExtra(UploadActivity.UPLOAD_IMAGE_EXTRA, finalImage);
+        saveFinalImageToTempFile();
         startActivity(intent);
+    }
+
+    /**
+     * Saves final version of edited image into a temporary file
+     */
+    private void saveFinalImageToTempFile() {
+        try {
+            OutputStream out = new FileOutputStream(FINAL_IMAGE_PATH);
+            finalImage.compress(Bitmap.CompressFormat.PNG, 100, out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

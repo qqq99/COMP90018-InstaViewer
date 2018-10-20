@@ -34,10 +34,6 @@ import static unimelb.comp90018_instaviewer.utilities.PermissionUtil.checkCamera
 import static unimelb.comp90018_instaviewer.utilities.PermissionUtil.checkWriteStorage;
 
 public class SelectPhotoActivity extends AppCompatActivity implements GalleryFragment.OnGalleryImageSelectedListener {
-//    public static final int REQUEST_CODE_CAMERA = 111;
-//    public static final int REQUEST_CODE_READ_STORAGE = 222;
-//    public static final int REQUEST_CODE_WRITE_STORAGE = 333;
-
     public static final int REQUEST_CODE_GET_CAMERA_PHOTO = 1;
 
     private FragmentManager fm = getSupportFragmentManager();
@@ -81,9 +77,6 @@ public class SelectPhotoActivity extends AppCompatActivity implements GalleryFra
         if (id == R.id.navigation_next) {
             Timber.d("Going to edit image with path: " + gallerySelectedImage);
             loadPhotoEditActivity(gallerySelectedImage);
-//            Intent intent = new Intent(SelectPhotoActivity.this, UploadActivity.class);
-//            intent.putExtra(UploadActivity.UPLOAD_IMAGE_EXTRA, gallerySelectedImage);
-//            startActivity(intent);
             return true;
         } else if (id == android.R.id.home) {
             onBackPressed();

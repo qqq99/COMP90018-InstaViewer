@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "unimelb.comp90018_instaviewer"
-        minSdkVersion 18
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -20,6 +20,8 @@ android {
     }
     testOptions {
         unitTests.returnDefaultValues = true
+    }
+    productFlavors {
     }
 }
 
@@ -58,6 +60,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-functions:16.1.0'
     implementation 'com.google.firebase:firebase-storage:16.0.3'
 
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+
     /* Camera and photo editor */
     implementation 'com.github.lovetuzitong:MultiImageSelector:1.2'
     implementation 'com.github.lovetuzitong:MultiImageSelector:1.2'
@@ -82,6 +86,8 @@ dependencies {
     compile 'com.karumi:dexter:4.1.0'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
     compile 'com.github.yalantis:ucrop:2.2.2'
+
+    /* Karlie/Edward */
     implementation 'com.clj.fastble:FastBleLib:2.3.2'
 }
 

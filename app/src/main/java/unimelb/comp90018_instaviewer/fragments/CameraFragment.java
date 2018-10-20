@@ -65,11 +65,6 @@ public class CameraFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        try {
-//            fragmentListener = (OnGalleryImageSelectedListener) context;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(context.toString() + " must implement OnGalleryImageSelectedListener");
-//        }
     }
 
     /**
