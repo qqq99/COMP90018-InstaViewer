@@ -31,10 +31,10 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.navigation_user_feed:
                     return true;
                 case R.id.navigation_search:
+                    startActivity(new Intent(HomeActivity.this, WifiDirectActivity.class));
                     return true;
                 case R.id.navigation_post:
-                    Intent intent = new Intent(HomeActivity.this, SelectPhotoActivity.class);
-                    startActivity(intent);
+                    startActivity(new Intent(HomeActivity.this, SelectPhotoActivity.class));
                     return true;
                 case R.id.navigation_activity_feed:
                     return true;

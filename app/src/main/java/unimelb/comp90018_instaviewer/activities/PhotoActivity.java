@@ -30,21 +30,17 @@ public class PhotoActivity extends AppCompatActivity {
         Intent fromIntent = getIntent();
         if (fromIntent != null) {
             String imageSavedPath = fromIntent.getStringExtra("imageSavedPath");
-            if (imageSavedPath != null) {
-                Toast.makeText(PhotoActivity.this,
-                        "Processed image has been saved to path: " + imageSavedPath, Toast.LENGTH_LONG).show();
-            }
+            Toast.makeText(PhotoActivity.this,
+                    "Processed image has been saved to path: " + imageSavedPath, Toast.LENGTH_LONG).show();
         }
 
         PhotoOrCropUtil.getInstance().setAlbumAndCameraCallback(new PhotoOrCropUtil.PhotoOrCropListener() {
             @Override
             public void uploadAvatar(String imageFilePath) {
-                if (imageFilePath != null) {
-                    Intent intent = new Intent(PhotoActivity.this, PhotoProcessActivity.class);
-                    intent.putExtra("imagePath", imageFilePath);
-                    startActivity(intent);
-                    PhotoActivity.this.finish();
-                }
+                Intent intent = new Intent(PhotoActivity.this, PhotoProcessActivity.class);
+                intent.putExtra("imagePath", imageFilePath);
+                startActivity(intent);
+                PhotoActivity.this.finish();
             }
         });
     }

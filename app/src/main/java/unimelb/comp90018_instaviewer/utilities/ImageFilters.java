@@ -26,7 +26,7 @@ public class ImageFilters {
         Bitmap bmOut = Bitmap.createBitmap(src.getWidth() + 96, src.getHeight() + 96, Bitmap.Config.ARGB_8888);
         // setup canvas for painting
         Canvas canvas = new Canvas(bmOut);
-        // setup default color
+        // setup default_img color
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
 
         // create a blur paint for capturing alpha
