@@ -9,11 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.models.FeedPost;
-import unimelb.comp90018_instaviewer.utilities.FeedAdapter;
+import unimelb.comp90018_instaviewer.adapters.FeedAdapter;
 
 public class HomeFragment extends Fragment {
     private RecyclerView mRecyclerView;
