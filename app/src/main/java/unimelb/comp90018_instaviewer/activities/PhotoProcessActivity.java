@@ -31,7 +31,7 @@ public class PhotoProcessActivity extends AppCompatActivity {
     private Bitmap oriBitmap;
     private ImageFilters imgFilter;
 
-    private Bitmap intermediateBitmap;
+    private Bitmap bitmap;
     private String oriImagePath;
     private SeekBar saturationSeekBar, brightnessSeekBar, contrastSeekBar;
 
@@ -52,7 +52,6 @@ public class PhotoProcessActivity extends AppCompatActivity {
             public void uploadAvatar(String imageFilePath) {
                 Toast.makeText(PhotoProcessActivity.this, "from crop", Toast.LENGTH_SHORT).show();
                 Bitmap bitmap = BitmapFactory.decodeFile(imageFilePath);
-                intermediateBitmap = bitmap;
                 imageView.setImageBitmap(bitmap);
             }
         });
@@ -73,15 +72,13 @@ public class PhotoProcessActivity extends AppCompatActivity {
         this.contrastSeekBar = findViewById(R.id.contrastSeekbar);
 
         this.oriBitmap = BitmapFactory.decodeFile(this.oriImagePath);
-        this.intermediateBitmap = oriBitmap;
         this.imageView = findViewById(R.id.IvImage);
         this.imageView.setImageBitmap(this.oriBitmap);
     }
 
     private void filter(String type) {
-        if (!type.equals("")) {
-            Toast.makeText(PhotoProcessActivity.this, "converting to " + type, Toast.LENGTH_SHORT).show();
-        }
+        if (!type.equals(""))
+        Toast.makeText(PhotoProcessActivity.this, "converting to "+type, Toast.LENGTH_SHORT).show();
 
         Bitmap bitmap;
         Bitmap old = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
@@ -99,8 +96,8 @@ public class PhotoProcessActivity extends AppCompatActivity {
                 bitmap = oriBitmap;
                 break;
         }
-        intermediateBitmap = bitmap;
         imageView.setImageBitmap(bitmap);
+
     }
 
     private void addEventListener() {
@@ -127,9 +124,6 @@ public class PhotoProcessActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 filter("");
-                brightnessSeekBar.setProgress(127);
-                contrastSeekBar.setProgress(63);
-                saturationSeekBar.setProgress(100);
             }
         });
 
@@ -143,7 +137,7 @@ public class PhotoProcessActivity extends AppCompatActivity {
         doneWithImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String path = PhotoOrCropUtil.getInstance().saveImageToAlbum(imageView);
+                String path = PhotoOrCropUtil.getInstance().saveImage(imageView);
                 Intent intent = new Intent(PhotoProcessActivity.this, PhotoActivity.class);
                 intent.putExtra("imageSavedPath", path);
                 startActivity(intent);
@@ -163,7 +157,9 @@ public class PhotoProcessActivity extends AppCompatActivity {
                 .setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     public void onProgressChanged(SeekBar arg0, int progress,
                                                   boolean fromUser) {
-                        Bitmap bmp = Bitmap.createBitmap(intermediateBitmap.getWidth(), intermediateBitmap.getHeight(),
+                        Bitmap old = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+
+                        Bitmap bmp = Bitmap.createBitmap(old.getWidth(), old.getHeight(),
                                 Bitmap.Config.ARGB_8888);
                         ColorMatrix cMatrix = new ColorMatrix();
                         cMatrix.setSaturation((float) (progress / 100.0));
@@ -172,7 +168,7 @@ public class PhotoProcessActivity extends AppCompatActivity {
                         paint.setColorFilter(new ColorMatrixColorFilter(cMatrix));
 
                         Canvas canvas = new Canvas(bmp);
-                        canvas.drawBitmap(intermediateBitmap, 0, 0, paint);
+                        canvas.drawBitmap(old, 0, 0, paint);
                         imageView.setImageBitmap(bmp);
                     }
 
@@ -187,7 +183,9 @@ public class PhotoProcessActivity extends AppCompatActivity {
                 .setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     public void onProgressChanged(SeekBar arg0, int progress,
                                                   boolean fromUser) {
-                        Bitmap bmp = Bitmap.createBitmap(intermediateBitmap.getWidth(), intermediateBitmap.getHeight(),
+                        Bitmap old = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+
+                        Bitmap bmp = Bitmap.createBitmap(old.getWidth(), old.getHeight(),
                                 Bitmap.Config.ARGB_8888);
                         int brightness = progress - 127;
                         ColorMatrix cMatrix = new ColorMatrix();
@@ -199,7 +197,7 @@ public class PhotoProcessActivity extends AppCompatActivity {
                         paint.setColorFilter(new ColorMatrixColorFilter(cMatrix));
 
                         Canvas canvas = new Canvas(bmp);
-                        canvas.drawBitmap(intermediateBitmap, 0, 0, paint);
+                        canvas.drawBitmap(old, 0, 0, paint);
                         imageView.setImageBitmap(bmp);
                     }
 
@@ -214,9 +212,10 @@ public class PhotoProcessActivity extends AppCompatActivity {
                 .setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     public void onProgressChanged(SeekBar arg0, int progress,
                                                   boolean fromUser) {
-                        Bitmap bmp = Bitmap.createBitmap(intermediateBitmap.getWidth(), intermediateBitmap.getHeight(),
+                        Bitmap old = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                        Bitmap bmp = Bitmap.createBitmap(old.getWidth(), old.getHeight(),
                                 Bitmap.Config.ARGB_8888);
-                        float contrast = (float) ((progress + 64.0) / 128.0);
+                        float contrast = (float) ((progress + 64) / 128.0);
                         ColorMatrix cMatrix = new ColorMatrix();
                         cMatrix.set(new float[] { contrast, 0, 0, 0, 0, 0,
                                 contrast, 0, 0, 0,
@@ -226,7 +225,7 @@ public class PhotoProcessActivity extends AppCompatActivity {
                         paint.setColorFilter(new ColorMatrixColorFilter(cMatrix));
 
                         Canvas canvas = new Canvas(bmp);
-                        canvas.drawBitmap(intermediateBitmap, 0, 0, paint);
+                        canvas.drawBitmap(old, 0, 0, paint);
                         imageView.setImageBitmap(bmp);
                     }
 
@@ -236,7 +235,6 @@ public class PhotoProcessActivity extends AppCompatActivity {
                     public void onStopTrackingTouch(SeekBar seekBar) {
                     }
                 });
-
     }
 
     public void cropImage(View view) {
