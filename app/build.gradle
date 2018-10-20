@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "unimelb.comp90018_instaviewer"
-        minSdkVersion 18
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -20,6 +20,8 @@ android {
     }
     testOptions {
         unitTests.returnDefaultValues = true
+    }
+    productFlavors {
     }
 }
 
@@ -82,7 +84,6 @@ dependencies {
     compile 'com.karumi:dexter:4.1.0'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
     compile 'com.github.yalantis:ucrop:2.2.2'
-    implementation 'com.clj.fastble:FastBleLib:2.3.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

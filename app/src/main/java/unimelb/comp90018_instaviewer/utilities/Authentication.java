@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import unimelb.comp90018_instaviewer.R;
+import unimelb.comp90018_instaviewer.constants.FirebaseApi;
 
 public class Authentication implements Runnable {
 
@@ -42,7 +43,7 @@ public class Authentication implements Runnable {
         data.put("name", user.getDisplayName());
 
         return mFunctions
-                .getHttpsCallable("createUser")
+                .getHttpsCallable(FirebaseApi.createUser)
                 .call(data)
                 .continueWith(new Continuation<HttpsCallableResult, String>() {
                     @Override
