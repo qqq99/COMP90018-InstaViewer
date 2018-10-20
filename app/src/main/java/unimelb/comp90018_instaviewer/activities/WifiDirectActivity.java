@@ -93,6 +93,7 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
     private float mCurrentPosY;
     private volatile boolean upReacted = false;
     private volatile boolean isSendingPhoto = false;
+    private volatile boolean isPhotoUploaded = false;
     private volatile AtomicInteger currentSendStatus = new AtomicInteger();
 
     @Override
@@ -249,6 +250,7 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
                     String picturePath = cursor.getString(columnIndex);
                     cursor.close();
                     imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                    isPhotoUploaded = true;
                 }
         }
     }
@@ -311,7 +313,9 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
                         if (Math.abs(mCurrentPosX - mPosX) >= 100 && upReacted == false) {
                             upReacted = true;
                             if (isSendingPhoto == false) {
-                                handler.obtainMessage(STATE_TO_SEND_PHOTO, 0, 0, null).sendToTarget();
+                                if (isPhotoUploaded) {
+                                    handler.obtainMessage(STATE_TO_SEND_PHOTO, 0, 0, null).sendToTarget();
+                                }
                             } else {
                                 Toast.makeText(getApplicationContext(), "Last photo is broadcasting, wait for a moment", Toast.LENGTH_SHORT).show();
                             }
