@@ -144,7 +144,7 @@ public class UploadActivity extends AppCompatActivity {
 
     private void uploadPostToFirebase(String caption, String imageUrl) {
         Timber.d("Uploading post to firebase...");
-        Timber.d("Location == null: " + (locationFinder.getLocation() == null ));
+//        Timber.d("Location == null: " + (locationFinder.getLocation() == null ));
         Timber.d("Location switch not checked: " + (!locationSwitch.isChecked()));
 
         Map<String, Object> data = new HashMap<>();
