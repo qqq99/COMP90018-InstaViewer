@@ -73,8 +73,6 @@ public class HomeFragment extends Fragment {
                 writeDataSet(task.getResult());
                 mAdapter = new FeedAdapter(mDataset, getContext());
                 mRecyclerView.setAdapter(mAdapter);
-
-
             }
         });
 

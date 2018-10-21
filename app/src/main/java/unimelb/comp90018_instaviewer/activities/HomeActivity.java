@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import timber.log.Timber;
 import unimelb.comp90018_instaviewer.R;
+import unimelb.comp90018_instaviewer.fragments.ActivityFragment;
 import unimelb.comp90018_instaviewer.fragments.HomeFragment;
 import unimelb.comp90018_instaviewer.fragments.PhotoFragment;
 import unimelb.comp90018_instaviewer.fragments.ProfileFragment;
@@ -56,6 +57,9 @@ public class HomeActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_activity_feed:
                     getSupportActionBar().setTitle("Activities");
+                    fm.beginTransaction()
+                            .replace(R.id.homeLayoutFragment, new ActivityFragment()) // TODO: Do not instantiate new one every time (after refresh is added)
+                            .commit();
                     return true;
                 case R.id.navigation_profile:
                     getSupportActionBar().setTitle("Profile");
