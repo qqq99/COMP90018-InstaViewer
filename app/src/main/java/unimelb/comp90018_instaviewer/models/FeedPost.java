@@ -2,34 +2,44 @@ package unimelb.comp90018_instaviewer.models;
 
 public class FeedPost {
     //Insert DB post stuff here
-    private String mUserId;
-    private String mOwnerName;
-    private String mImageUrl;
-    private String mMessage;
-    private int mLikes;
-    private int mComments;
+    private String UserId;
+    private String postId;
+    private String ownerName;
+    private String imageUrl;
+    private String message;
+    private int nLikes;
+    private int nComments;
 
 
-    public FeedPost(String mUserId, String mOwnerName, String mImageUrl, String mMessage, int mLikes, int mComments) {
-        this.mUserId = mUserId;
-        this.mMessage = mMessage;
-        this.mOwnerName = mOwnerName;
-        this.mImageUrl = mImageUrl;
-        this.mLikes = mLikes;
-        this.mComments = mComments;
+    public FeedPost(String UserId, String postId, String ownerName, String imageUrl, String message, int nLikes, int nComments) {
+        this.UserId = UserId;
+        this.postId = postId;
+        this.message = message;
+        this.ownerName = ownerName;
+        this.imageUrl = imageUrl;
+        this.nLikes = nLikes;
+        this.nComments = nComments;
     }
 
-    public String getmOwnerName() {
-        return mOwnerName;
+    public String getOwnerName() {
+        return ownerName;
     }
 
-    public String getmImageUrl() {
-        return mImageUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public String getmMessage() {
-        return mMessage;
+    public String getMessage() {
+        return message;
     }
 
-    public int getmComments(){ return mComments; }
+    public int getnComments(){ return nComments; }
+
+    public int getnLikes() {
+        return nLikes;
+    }
+
+    public String getPostId() {
+        return postId;
+    }
 }

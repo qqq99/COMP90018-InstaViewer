@@ -68,8 +68,7 @@ public class HomeActivity extends AppCompatActivity {
         /* Set up toolbar */
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("Instaviewer");
 
         fm.beginTransaction()
                 .add(R.id.homeLayoutFragment, new HomeFragment())

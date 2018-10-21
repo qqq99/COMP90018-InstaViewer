@@ -3,6 +3,7 @@ package unimelb.comp90018_instaviewer.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +34,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<FeedPost> mDataset;
+    private ArrayList<FeedPost> mDataset = new ArrayList<FeedPost>();
     private FirebaseFunctions mFunctions;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
@@ -51,14 +52,12 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
         mRecyclerView = view.findViewById(R.id.recyclerView);
-
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mFunctions = FirebaseFunctions.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        mDataset = new ArrayList<FeedPost>();
         getFeed(currentUser).addOnCompleteListener(new OnCompleteListener<ArrayList<HashMap>>() {
 
             @Override
@@ -72,7 +71,6 @@ public class HomeFragment extends Fragment {
                     }
 
                     Log.w(TAG, "getUserFeed:onFailure", e);
-//                    showSnackbar("An error occurred.");
                     return;
                 }
                 writeDataSet(task.getResult());
@@ -83,15 +81,44 @@ public class HomeFragment extends Fragment {
             }
         });
 
+//        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                getFeed(mAuth.getCurrentUser()).addOnCompleteListener(new OnCompleteListener<ArrayList<HashMap>>() {
+//
+//                    @Override
+//                    public void onComplete(@NonNull Task<ArrayList<HashMap>> task) {
+//                        if (!task.isSuccessful()) {
+//                            Exception e = task.getException();
+//                            if (e instanceof FirebaseFunctionsException) {
+//                                FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+//                                FirebaseFunctionsException.Code code = ffe.getCode();
+//                                Object details = ffe.getDetails();
+//                            }
+//
+//                            Log.w(TAG, "getUserFeed:onFailure", e);
+//                            return;
+//                        }
+//                        writeDataSet(task.getResult());
+//                        ((FeedAdapter)mAdapter).clear();
+//                        ((FeedAdapter)mAdapter).addAll(mDataset);
+//                        swipeContainer.setRefreshing(false);
+//                    }
+//                });;
+//            }
+//        });
+
         // Inflate the layout for this fragment
         return view;
     }
 
     private void writeDataSet(ArrayList<HashMap> results) {
+        mDataset.clear();
         for (HashMap entry : results) {
             HashMap post = (HashMap) entry.get("post");
 
             mDataset.add(new FeedPost((String) post.get("userId"),
+                    (String) entry.get("id"),
                     (String) post.get("username"),
                     (String) post.get("mediaLink"),
                     (String) post.get("caption"),
@@ -101,7 +128,6 @@ public class HomeFragment extends Fragment {
     }
 
     private Task<ArrayList<HashMap>> getFeed(FirebaseUser user) {
-        // Create the arguments to the callable function.
         Map<String, Object> data = new HashMap<>();
         data.put("userId", user.getUid());
 
@@ -111,10 +137,6 @@ public class HomeFragment extends Fragment {
                 .continueWith(new Continuation<HttpsCallableResult, ArrayList<HashMap>>() {
                     @Override
                     public ArrayList<HashMap> then(@NonNull Task<HttpsCallableResult> task) throws Exception {
-                        // This continuation runs on either success or failure, but if the task
-                        // has failed then getResult() will throw an Exception which will be
-                        // propagated down.
-
                         HashMap result = (HashMap) task.getResult().getData();
                         ArrayList<HashMap> resultData = (ArrayList<HashMap>) result.get("data");
 
