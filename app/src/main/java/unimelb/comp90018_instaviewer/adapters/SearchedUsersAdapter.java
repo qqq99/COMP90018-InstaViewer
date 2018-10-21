@@ -77,7 +77,7 @@ public class SearchedUsersAdapter extends RecyclerView.Adapter<SearchedUsersAdap
             });
         }
 
-        if (user.getMutual() > 0) {
+        if (user.getMutual() >= 0) {
             holder.mMutualCount.setVisibility(View.VISIBLE);
             holder.mMutualCount.setText(user.getMutual() + " mutual followings");
         }
