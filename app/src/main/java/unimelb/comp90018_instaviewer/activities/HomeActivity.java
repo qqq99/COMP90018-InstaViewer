@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,10 @@ public class HomeActivity extends AppCompatActivity {
     private FragmentManager fm = getSupportFragmentManager();
     private SearchFragment searchFragment = new SearchFragment();
     private static final String TAG = "HOME";
+
+    private MenuItem menuSearch;
+    private SearchView searchView;
+
 
     Toolbar toolbar;
     BottomNavigationView navigation;
@@ -80,6 +85,26 @@ public class HomeActivity extends AppCompatActivity {
 
         if (navigation.getMenu().findItem(navigation.getSelectedItemId()).getItemId() == R.id.navigation_search) {
             getMenuInflater().inflate(R.menu.search, menu);
+            menuSearch = menu.findItem(R.id.action_search);
+            searchView = (SearchView) menuSearch.getActionView();
+            searchView.setQueryHint("Search users");
+
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    searchView.clearFocus();
+//                    searchView.onActionViewCollapsed();
+
+                    searchFragment.updateSearchText(query);
+
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    return false;
+                }
+            });
         } else {
             toolbar.getMenu().clear();
         }
