@@ -18,9 +18,10 @@
         android:id="@+id/comment_input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/comment_user_icon">
+        app:layout_constraintEnd_toStartOf="@+id/post_comment_btn"
+        app:layout_constraintStart_toStartOf="parent">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/comment_text"
@@ -30,13 +31,16 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <ImageView
-        android:id="@+id/comment_user_icon"
+    <Button
+        android:id="@+id/post_comment_btn"
+        style="@android:style/Widget.DeviceDefault.Button.Borderless.Small"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:text="Post"
+        android:textAllCaps="false"
+        android:textColor="@color/color_main"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/comment_input_layout"
-        app:srcCompat="@drawable/baseline_account_circle_white_48" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/comments_view" />
 
 </android.support.constraint.ConstraintLayout>

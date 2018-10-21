@@ -1,25 +1,30 @@
 package unimelb.comp90018_instaviewer.models;
 
+import javax.annotation.Nullable;
+
 public class FeedPost {
     //Insert DB post stuff here
-    private String UserId;
+    private String userId;
     private String postId;
     private String ownerName;
     private String imageUrl;
     private String message;
     private int nLikes;
     private int nComments;
+    private String avatar;
 
-
-    public FeedPost(String UserId, String postId, String ownerName, String imageUrl, String message, int nLikes, int nComments) {
-        this.UserId = UserId;
+    public FeedPost(String UserId, String postId, String ownerName, String imageUrl, String message, int nLikes, int nComments, @Nullable String avatar) {
+        this.userId = UserId;
         this.postId = postId;
         this.message = message;
         this.ownerName = ownerName;
         this.imageUrl = imageUrl;
         this.nLikes = nLikes;
         this.nComments = nComments;
+        this.avatar = avatar;
     }
+
+    public String getUserId() { return userId; }
 
     public String getOwnerName() {
         return ownerName;
@@ -42,4 +47,6 @@ public class FeedPost {
     public String getPostId() {
         return postId;
     }
+
+    public String getAvatar() { return avatar; }
 }

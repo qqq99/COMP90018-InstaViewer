@@ -113,14 +113,15 @@ public class HomeFragment extends Fragment {
         mDataset.clear();
         for (HashMap entry : results) {
             HashMap post = (HashMap) entry.get("post");
-
+            HashMap user = (HashMap) entry.get("user");
             mDataset.add(new FeedPost((String) post.get("userId"),
                     (String) entry.get("id"),
-                    (String) post.get("username"),
+                    (String) user.get("name"),
                     (String) post.get("mediaLink"),
                     (String) post.get("caption"),
                     (int) entry.get("likesCount"),
-                    (int) entry.get("commentsCount")));
+                    (int) entry.get("commentsCount"),
+                    (String) user.get("avatar")));
         }
     }
 
