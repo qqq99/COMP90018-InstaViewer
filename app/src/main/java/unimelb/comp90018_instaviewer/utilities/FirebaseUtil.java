@@ -29,6 +29,22 @@ import unimelb.comp90018_instaviewer.constants.FirebaseApi;
 import unimelb.comp90018_instaviewer.models.Callback;
 
 public class FirebaseUtil {
+    public static Task<HashMap> getProfile() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("userId", FirebaseAuth.getInstance().getUid());
+
+        return FirebaseFunctions.getInstance()
+                .getHttpsCallable(FirebaseApi.getUserProfile)
+                .call(data)
+                .continueWith(new Continuation<HttpsCallableResult, HashMap>() {
+                    @Override
+                    public HashMap then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        HashMap result = (HashMap) task.getResult().getData();
+                        return result;
+                    }
+                });
+    }
+
     public static Task<HashMap> searchUsers(String search) {
         Map<String, Object> data = new HashMap<>();
         data.put("query", search);
