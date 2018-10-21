@@ -36,7 +36,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         ImageView userIcon;
         ImageView commentIcon;
 
-
         public FeedViewHolder(View v) {
             super(v);
             userName = v.findViewById(R.id.feed_post_user);

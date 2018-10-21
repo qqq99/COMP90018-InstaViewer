@@ -68,6 +68,7 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppTheme"/>
+        <activity android:name=".activities.CommentsActivity" />
 
     </application>
 
