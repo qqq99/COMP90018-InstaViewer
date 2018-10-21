@@ -3,6 +3,7 @@ package unimelb.comp90018_instaviewer.activities;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,7 @@ import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.adapters.CommentsAdapter;
 import unimelb.comp90018_instaviewer.models.Comment;
 import unimelb.comp90018_instaviewer.models.FeedPost;
+import unimelb.comp90018_instaviewer.utilities.ProgressLoading;
 
 public class CommentsActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
@@ -43,6 +45,8 @@ public class CommentsActivity extends AppCompatActivity {
     private FeedPost post;
     private String postId;
     private static final String TAG = "CommentsActivity";
+
+    private ProgressLoading progressLoading;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,6 +79,8 @@ public class CommentsActivity extends AppCompatActivity {
                 });
             }
         });
+
+        progressLoading = new ProgressLoading(CommentsActivity.this, (ConstraintLayout) findViewById(R.id.layoutComments));
 
         getIncomingIntent();
         if (postId == null) {
@@ -169,6 +175,10 @@ public class CommentsActivity extends AppCompatActivity {
     }
 
     private Task<String> submitComment(String message) {
+        progressLoading.start();
+        mCommentText.clearComposingText();
+        mCommentText.clearFocus();
+
         Map<String, Object> data = new HashMap<>();
         data.put("postId", postId);
         data.put("userId", currentUser.getUid());
@@ -181,6 +191,10 @@ public class CommentsActivity extends AppCompatActivity {
                 .continueWith(new Continuation<HttpsCallableResult, String>() {
                     @Override
                     public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        progressLoading.stop();
+                        Toast.makeText(CommentsActivity.this, "Your comment has been posted", Toast.LENGTH_SHORT).show();
+                        recreate();
+
                         String result = (String) task.getResult().getData();
 
                         return result;

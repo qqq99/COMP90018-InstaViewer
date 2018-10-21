@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="8dp">
 
@@ -16,6 +17,29 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:gravity="center_vertical"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_marginRight="16dp"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnFollow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Follow"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <TextView
+            android:id="@+id/textMutualCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5 mutual"
+            app:layout_constraintTop_toBottomOf="@id/btnFollow"
+            app:layout_constraintRight_toRightOf="parent"
+            android:visibility="gone"/>
+
+    </android.support.constraint.ConstraintLayout>
 
 </LinearLayout>

@@ -15,6 +15,8 @@ import timber.log.Timber;
 import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.fragments.HomeFragment;
 import unimelb.comp90018_instaviewer.fragments.PhotoFragment;
+import unimelb.comp90018_instaviewer.fragments.ProfileFragment;
+import unimelb.comp90018_instaviewer.utilities.LocationFinder;
 import unimelb.comp90018_instaviewer.fragments.SearchFragment;
 
 public class HomeActivity extends AppCompatActivity {
@@ -24,6 +26,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private MenuItem menuSearch;
     private SearchView searchView;
+
+    private ProfileFragment profileFragment = new ProfileFragment();
 
 
     Toolbar toolbar;
@@ -55,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_profile:
                     getSupportActionBar().setTitle("Profile");
+                    fm.beginTransaction().replace(R.id.homeLayoutFragment, profileFragment).commit();
                     return true;
             }
             return false;

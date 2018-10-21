@@ -86,9 +86,6 @@ public class GalleryFragment extends Fragment {
                                     int position, long id) {
                 if (null != images && !images.isEmpty()) {
                     String imagePath = images.get(position);
-                    Toast.makeText(getActivity(),
-                            "position " + position + " " + imagePath,
-                            Toast.LENGTH_SHORT).show();
 
                     fragmentListener.onGalleryImageSelected(imagePath);
                     Glide.with(getActivity()).load(imagePath)
