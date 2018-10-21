@@ -26,7 +26,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
 
     public static class FeedViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
         TextView userName;
         TextView postMessage;
         TextView comments;
@@ -68,6 +67,16 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         } else {
             holder.comments.setText("No comments");
         }
+        holder.commentIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FeedPost currentPost = mDataset.get(position);
+                Intent intent = new Intent(mContext, CommentsActivity.class);
+                intent.putExtra("postId", currentPost.getPostId());
+                mContext.startActivity(intent);
+            }
+        });
+
         holder.comments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +93,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                 .apply(new RequestOptions()
                 .fitCenter())
                 .into(holder.picture);
+
+        if (currentPost.getAvatar() != null) {
+            Glide.with(mContext)
+                    .load(currentPost.getAvatar())
+                    .into(holder.userIcon);
+        }
+
 
     }
 
