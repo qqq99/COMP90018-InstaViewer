@@ -177,6 +177,7 @@ public class CommentsActivity extends AppCompatActivity {
     private Task<String> submitComment(String message) {
         progressLoading.start();
         mCommentText.getText().clear();
+        mCommentText.setText("");
         mCommentText.clearFocus();
 
         Map<String, Object> data = new HashMap<>();
