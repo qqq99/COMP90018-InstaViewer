@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.functions.FirebaseFunctionsException;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class ProfileFragment extends Fragment {
     private PostsAdapter postsAdapter;
 
     private ArrayList<ProfilePost> profilePosts = new ArrayList<>();
+    private String userId = FirebaseAuth.getInstance().getUid();
 
     public ProfileFragment() {}
 
@@ -74,11 +76,6 @@ public class ProfileFragment extends Fragment {
                     ProfilePost post = profilePosts.get(position);
 
                     Toast.makeText(getActivity(),"Post with id: " + post.getPostId(), Toast.LENGTH_SHORT).show();
-
-//                    fragmentListener.onGalleryImageSelected(imagePath);
-//                    Glide.with(getActivity()).load(imagePath)
-//                            .into(galleryImagePreview
-//                            );
                 }
             }
         });
@@ -118,7 +115,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void loadProfile() {
-        FirebaseUtil.getProfile()
+        FirebaseUtil.getProfile(userId)
                 .addOnCompleteListener(new OnCompleteListener<HashMap>() {
                     @Override
                     public void onComplete(@NonNull Task<HashMap> task) {
@@ -220,12 +217,11 @@ public class ProfileFragment extends Fragment {
             String mediaLink = profilePost.getMedialink();
 
             Glide.with(context)
-//                    .applyDefaultRequestOptions(new RequestOptions()
-//                            .placeholder(new ColorDrawable(context.getResources().getColor(R.color.colorAccent)))
-//                    )
+                    .applyDefaultRequestOptions(new RequestOptions()
+                            .placeholder(R.drawable.ic_person_black_24dp)
+                    )
                     .load(mediaLink)
                     .apply(new RequestOptions().fitCenter())
-//                    .apply(RequestOptions.centerCropTransform())
                     .into(imageView);
 
             return imageView;

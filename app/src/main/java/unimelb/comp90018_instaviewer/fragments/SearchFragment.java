@@ -23,6 +23,7 @@ import java.util.HashMap;
 
 import timber.log.Timber;
 import unimelb.comp90018_instaviewer.R;
+import unimelb.comp90018_instaviewer.activities.SuggestionsActivity;
 import unimelb.comp90018_instaviewer.activities.UploadActivity;
 import unimelb.comp90018_instaviewer.activities.WifiDirectActivity;
 import unimelb.comp90018_instaviewer.adapters.SearchedUsersAdapter;
@@ -38,6 +39,8 @@ public class SearchFragment extends Fragment {
     RecyclerView recyclerView;
     SearchedUsersAdapter adapter;
 
+    Button suggestionButton;
+
     ProgressLoading progressLoading;
 
     public SearchFragment() {
@@ -50,7 +53,14 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         Button wifiFeatureButton = view.findViewById(R.id.btnShowWifiFeature);
         recyclerView = view.findViewById(R.id.recyclerViewSearchedsUsers);
+        suggestionButton = view.findViewById(R.id.btnSuggestUsers);
 
+        suggestionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchSuggestionActivity();
+            }
+        });
         wifiFeatureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,11 +127,17 @@ public class SearchFragment extends Fragment {
                             Timber.d(message);
                             Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                         }
+
+                        suggestionButton.setVisibility(View.VISIBLE);
                     }
                 });
     }
 
     private void launchWifiActivity() {
         getActivity().startActivity(new Intent(getActivity(), WifiDirectActivity.class));
+    }
+
+    private void launchSuggestionActivity() {
+        getActivity().startActivity(new Intent(getActivity(), SuggestionsActivity.class));
     }
 }

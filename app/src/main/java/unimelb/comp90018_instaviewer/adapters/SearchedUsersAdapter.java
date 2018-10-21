@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,11 +24,15 @@ public class SearchedUsersAdapter extends RecyclerView.Adapter<SearchedUsersAdap
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView mTextView;
         public ImageView mImageView;
+        public Button mButton;
+        public TextView mMutualCount;
 
         public MyViewHolder(View v) {
             super(v);
             mTextView = v.findViewById(R.id.textSearchedUser);
             mImageView = v.findViewById(R.id.imgSearchUser);
+            mButton = v.findViewById(R.id.btnFollow);
+            mMutualCount = v.findViewById(R.id.textMutualCount);
         }
     }
 
@@ -48,8 +53,8 @@ public class SearchedUsersAdapter extends RecyclerView.Adapter<SearchedUsersAdap
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        User user = mDataset.get(position);
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
+        final User user = mDataset.get(position);
         holder.mTextView.setText(user.getName());
         Glide.with(mActivity)
                 .applyDefaultRequestOptions(new RequestOptions()
@@ -58,6 +63,24 @@ public class SearchedUsersAdapter extends RecyclerView.Adapter<SearchedUsersAdap
                 .load(user.getAvatar())
                 .apply(RequestOptions.centerCropTransform())
                 .into(holder.mImageView);
+
+        if (user.isFollowed()) {
+            holder.mButton.setText("Following");
+            holder.mButton.setBackgroundColor(mActivity.getResources().getColor(R.color.colorAccent));
+        } else {
+            holder.mButton.setText("Follow");
+            holder.mButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    followUser(user.getUserId(), holder.mButton);
+                }
+            });
+        }
+
+        if (user.getMutual() > 0) {
+            holder.mMutualCount.setVisibility(View.VISIBLE);
+            holder.mMutualCount.setText(user.getMutual() + " mutual followings");
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -69,5 +92,15 @@ public class SearchedUsersAdapter extends RecyclerView.Adapter<SearchedUsersAdap
     public void swap(ArrayList<User> mDataset) {
         this.mDataset = mDataset;
         notifyDataSetChanged();
+    }
+
+    private void followUser(String userId, Button button) {
+        button.setText("Following");
+        button.setBackgroundColor(mActivity.getResources().getColor(R.color.colorAccent));
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
     }
 }
