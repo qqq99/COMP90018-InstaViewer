@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fadingEdge="vertical"
     android:scrollbars="vertical">
 
@@ -9,6 +10,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/white"
+                app:titleTextColor="@android:color/black"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        </android.support.design.widget.AppBarLayout>
 
         <Button
             android:id="@+id/btn_search"
@@ -24,7 +38,7 @@
             android:layout_marginBottom="10px"
             android:text="waiting for connecting to devices"
             android:textAlignment="center"
-            android:textSize="46px" />
+            android:textSize="24px" />
 
         <unimelb.comp90018_instaviewer.utilities.DeviceListView
             android:id="@+id/lv_devices"

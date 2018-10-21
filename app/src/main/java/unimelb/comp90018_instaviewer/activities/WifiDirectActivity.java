@@ -30,6 +30,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -49,6 +51,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import timber.log.Timber;
 import unimelb.comp90018_instaviewer.R;
 import unimelb.comp90018_instaviewer.utilities.DeviceInformation;
 import unimelb.comp90018_instaviewer.utilities.MyAdapter;
@@ -100,8 +104,14 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_direct);
 
+        /* Set up toolbar */
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         this.statusView = findViewById(R.id.status_view);
-        this.statusView.setBackgroundColor(Color.CYAN);
+//        this.statusView.setBackgroundColor(Color.CYAN);
         this.imageView = findViewById(R.id.pic_view);
         this.lvDevices = findViewById(R.id.lv_devices);
 
@@ -112,6 +122,18 @@ public class WifiDirectActivity extends AppCompatActivity implements AdapterView
         this.initDataStructures();
         this.initListeners();
         new ImgServerAsyncTask().execute();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void onClick(View view) {
